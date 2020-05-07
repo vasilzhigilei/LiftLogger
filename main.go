@@ -3,12 +3,22 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main(){
-	http.HandleFunc("/", handler)
+	// Declare a new router
+	r := mux.NewRouter()
 
-	http.ListenAndServe(":8000", nil)
+	r.HandleFunc("/hello", handler).Methods("GET")
+
+	// file directory for assets
+	staticFileDirectory := http.Dir("./assets/")
+	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
+
+	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
+	http.ListenAndServe(":8000", r)
 }
 
 func handler(w http.ResponseWriter, r *http.Request){
