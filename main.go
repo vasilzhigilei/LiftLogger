@@ -13,11 +13,13 @@ func main(){
 
 	r.HandleFunc("/hello", handler).Methods("GET")
 
-	// file directory for assets
+	// file directory for file serving
 	staticFileDirectory := http.Dir("./frontend/")
-	staticFileHandler := http.StripPrefix("/frontend/", http.FileServer(staticFileDirectory))
+	// the prefix is the routing address, the address the user goes to
+	staticFileHandler := http.StripPrefix("/", http.FileServer(staticFileDirectory))
 
-	r.PathPrefix("/frontend/").Handler(staticFileHandler).Methods("GET")
+	// keep PathPrefix empty
+	r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
 	http.ListenAndServe(":8000", r)
 }
 
