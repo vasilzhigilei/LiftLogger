@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="en">
 <html>
    <head>
       <!-- Required meta tags -->
@@ -13,14 +15,45 @@
       <title>LiftLogger</title>
    </head>
    <body>
-      <div id="intro" class="page-header">
-         <h1>{{ message }}</h1>
-      </div>
+      <div class="navbar navbar-expand-md navbar-light bg-light">
+         <div class="container">
+            <a href="#" class="navbar-brand">LiftLogger</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button> <!-- mobile navbar toggler -->
 
+         </div>
+      </div>
+      <div class="navbar navbar-expand-md navbar-light bg-light">
+         <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="#">Link</a>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="container">
+         <h1 id="vuehere">{{ message }}</h1>
+
+         <div class="row">
+            <div class="col-md-9">
+               this is the main ?bar?
+            </div>
+            <div class="col-md-3">
+               this is a sidebar
+            </div>
+         </div>
+      </div><!-- /.container -->
 
       <script type = "text/javascript">
          var vue_det = new Vue({
-            el: '#intro',
+            el: '#vuehere',
             data: {
                message: 'My first VueJS Task'
             }
