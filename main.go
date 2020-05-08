@@ -14,7 +14,7 @@ func main(){
 	r.HandleFunc("/hello", handler).Methods("GET")
 
 	// file directory for file serving
-	staticFileDirectory := http.Dir("./frontend/")
+	staticFileDirectory := http.Dir("./assets/")
 	// the prefix is the routing address, the address the user goes to
 	staticFileHandler := http.StripPrefix("/", http.FileServer(staticFileDirectory))
 
