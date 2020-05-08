@@ -14,10 +14,10 @@ func main(){
 	r.HandleFunc("/hello", handler).Methods("GET")
 
 	// file directory for assets
-	staticFileDirectory := http.Dir("./assets/")
-	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
+	staticFileDirectory := http.Dir("./frontend/")
+	staticFileHandler := http.StripPrefix("/frontend/", http.FileServer(staticFileDirectory))
 
-	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
+	r.PathPrefix("/frontend/").Handler(staticFileHandler).Methods("GET")
 	http.ListenAndServe(":8000", r)
 }
 
