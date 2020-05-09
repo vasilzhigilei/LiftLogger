@@ -1,7 +1,15 @@
-#bottomnav {
+.bottomnav {
     background-color: #34495E;
+}
+
+body{
+    background-color: #e9ecef;
 }
 
 .bg-darkerlight {
     background-color: #e9ecef;
+}
+
+.rounded {
+    border-radius: 7px;
 }
