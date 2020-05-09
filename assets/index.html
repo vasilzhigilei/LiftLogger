@@ -10,21 +10,23 @@
       <!-- Vue JS -->
       <!-- development version, includes helpful console warnings -->
       <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <!-- Local CSS -->
+      <link rel="stylesheet" type="text/css" href="styles.css">
 
       <!-- Title -->
       <title>LiftLogger</title>
    </head>
-   <body>
-      <div class="navbar navbar-expand-md navbar-light bg-light">
+   <body class="bg-light">
+      <div class="navbar navbar-expand-md navbar-light bg-darkerlight">
          <div class="container">
             <a href="#" class="navbar-brand">LiftLogger</a>
+            <button class="btn btn-outline-success pull-right" type="button">Log in/Sign up</button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
-            </button> <!-- mobile navbar toggler -->
-
+            </button> <!-- / mobile navbar toggler -->
          </div>
       </div>
-      <div class="navbar navbar-expand-md navbar-light bg-light">
+      <div id="bottomnav" class="navbar navbar-expand-md navbar-dark">
          <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                <ul class="navbar-nav mr-auto">
@@ -32,30 +34,31 @@
                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="#">Link</a>
+                     <a class="nav-link" href="#">About</a>
                   </li>
                </ul>
             </div>
          </div>
       </div>
-      <div class="container">
-         <h1 id="vuehere">{{ message }}</h1>
 
-         <div class="row">
-            <div class="col-md-9">
-               this is the main ?bar?
-            </div>
-            <div class="col-md-3">
-               this is a sidebar
+      <div class="bg-darkerlight">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <h1 id="vuehere">{{ username }}</h1>
+               </div>
             </div>
          </div>
-      </div><!-- /.container -->
+      </div>
+      <div class="container">
+         test
+      </div>
 
       <script type = "text/javascript">
          var vue_det = new Vue({
             el: '#vuehere',
             data: {
-               message: 'My first VueJS Task'
+               username: 'Vasil'
             }
          });
       </script>
