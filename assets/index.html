@@ -16,7 +16,7 @@
       <!-- Title -->
       <title>LiftLogger</title>
    </head>
-   <body>
+   <body class="bg-darkerlight">
       <div class="navbar navbar-expand-md navbar-light bg-darkerlight">
          <div class="container">
             <a href="#" class="navbar-brand">LiftLogger</a>
@@ -26,7 +26,7 @@
             </button> <!-- / mobile navbar toggler -->
          </div>
       </div>
-      <div class="navbar navbar-expand-md navbar-dark bottomnav">
+      <div class="navbar navbar-expand-md navbar-dark bg-darkblue">
          <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                <ul class="navbar-nav mr-auto">
@@ -54,7 +54,7 @@
       <br>
       <div class="container">
          <div class="row">
-            <div class="col-md-12 bg-light rounded">
+            <div class="col-md-12 bg-light padding rounded">
                <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item">
                      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Total Progress</a>
@@ -71,30 +71,124 @@
          </div>
          <br>
          <div class="row">
-            <div class="col-md-12 bg-light rounded">
-               <p class="h2">Log lifts</p>
-               <hr/>
-               <div class="row mb-3">
-                  <div class="col-sm-4 col-md-2">
-                     <p class="h5 textright">Deadlift</p>
-                  </div>
-                  <div class="col-sm-4 col-md-3">
-                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Weight" aria-describedby="dl-weight">
-                        <div class="input-group-append">
-                           <span class="input-group-text" id="dl-weight">lbs</span>
+            <div class="col-md-12 bg-light padding rounded">
+               <form>
+                  <p class="h3">Log lifts</p>
+                  <hr/>
+                  <div class="row mb-3"> <!-- WEIGHT AGE -->
+                     <div class="col-sm-4 col-md-2">
+                        <p class="h5 textright">You</p>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="u-weight">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="u-weight">lbs</span>
+                           </div>
                         </div>
                      </div>
-                  </div>
-                  <div class="col-sm-4 col-md-3">
-                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Reps" aria-describedby="dl-reps">
-                        <div class="input-group-append">
-                           <span class="input-group-text" id="dl-reps">Reps</span>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Age" aria-describedby="u-age">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="u-age">Years</span>
+                           </div>
                         </div>
                      </div>
-                  </div>
-               </div> <!-- / deadlift weight/reps row -->
+                  </div> <!-- / weight/age row -->
+                  <hr/>
+                  <div class="row mb-3"> <!-- DEADLIFT -->
+                     <div class="col-sm-4 col-md-2">
+                        <p class="h5 textright">Deadlift</p>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="dl-weight">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="dl-weight">lbs</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="dl-reps">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="dl-reps">Reps</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div> <!-- / deadlift weight/reps row -->
+                  <div class="row mb-3"> <!-- SQUAT -->
+                     <div class="col-sm-4 col-md-2">
+                        <p class="h5 textright">Squat</p>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="s-weight">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="s-weight">lbs</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="s-reps">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="s-reps">Reps</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div> <!-- / squat weight/reps row -->
+                  <div class="row mb-3"> <!-- BENCH PRESS -->
+                     <div class="col-sm-4 col-md-2">
+                        <p class="h5 textright">Bench Press</p>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="b-weight">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="b-weight">lbs</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="b-reps">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="b-reps">Reps</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div> <!-- / bench weight/reps row -->
+                  <div class="row mb-3"> <!-- OVERHEAD PRESS -->
+                     <div class="col-sm-4 col-md-2">
+                        <p class="h5 textright">Overhead Press</p>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="ohp-weight">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="ohp-weight">lbs</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-md-3">
+                        <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="ohp-reps">
+                           <div class="input-group-append">
+                              <span class="input-group-text" id="ohp-reps">Reps</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div> <!-- / overhead press weight/reps row -->
+                  <hr/>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-lg bg-darkblue">Analyze</button>
+                        <button type="submit" class="btn btn-primary btn-lg bg-darkblue">Log & Analyze</button>
+                     </div>
+                  </div> <!-- / submit row -->
+               </form>
             </div>
          </div>
 

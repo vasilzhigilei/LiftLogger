@@ -1,9 +1,5 @@
-.bottomnav {
+.bg-darkblue{
     background-color: #34495E;
-}
-
-body{
-    background-color: #e9ecef;
 }
 
 .bg-darkerlight {
@@ -17,4 +13,8 @@ body{
 .textright {
     text-align: right;
     margin-top: 6px;
+}
+
+.padding {
+    padding: 15px;
 }
