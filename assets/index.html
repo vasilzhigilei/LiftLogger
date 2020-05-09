@@ -45,7 +45,7 @@
          <div class="container">
             <div class="row">
                <div class="col-md-12">
-                  <h1 id="vuehere">{{ username }}</h1>
+                  <p class="h1" id="vuehere">{{ username }}</p>
                </div>
             </div>
          </div>
@@ -72,7 +72,29 @@
          <br>
          <div class="row">
             <div class="col-md-12 bg-light rounded">
+               <p class="h2">Log lifts</p>
                <hr/>
+               <div class="row mb-3">
+                  <div class="col-sm-4 col-md-2">
+                     <p class="h5 textright">Deadlift</p>
+                  </div>
+                  <div class="col-sm-4 col-md-3">
+                     <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Weight" aria-describedby="dl-weight">
+                        <div class="input-group-append">
+                           <span class="input-group-text" id="dl-weight">lbs</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-sm-4 col-md-3">
+                     <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Reps" aria-describedby="dl-reps">
+                        <div class="input-group-append">
+                           <span class="input-group-text" id="dl-reps">Reps</span>
+                        </div>
+                     </div>
+                  </div>
+               </div> <!-- / deadlift weight/reps row -->
             </div>
          </div>
 

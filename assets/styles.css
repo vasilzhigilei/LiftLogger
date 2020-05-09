@@ -13,3 +13,8 @@ body{
 .rounded {
     border-radius: 7px;
 }
+
+.textright {
+    text-align: right;
+    margin-top: 6px;
+}
