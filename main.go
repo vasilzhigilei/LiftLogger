@@ -1,12 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
+
+	"github.com/jackc/pgx"
 )
 
 // plain text db details, for now
@@ -41,22 +42,25 @@ func handler(w http.ResponseWriter, r *http.Request){
 }
 
 // happy to know I can return a pointer without worrying about the object deallocating :)
-func db_connect() *sql.DB{
-	// prints postgresql info to string
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	// opens sql connection to db
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
+func db_connect(applicationName string) *pgx.Conn{
+	var runtimeParams map[string]string
+	runtimeParams = make(map[string]string)
+	runtimeParams["application_name"] = applicationName
+	connConfig := pgx.ConnConfig{
+		User: "postgres",
+		Password: "password",
+		Host: "localhost",
+		Port: 5433,
+		Database: "liftlogger",
+		TLSConfig: nil,
+		UseFallbackTLS: false,
+		FallbackTLSConfig: nil,
+		RuntimeParams: runtimeParams,
 	}
-	// defers the closing of the db connection to end of program
-	defer db.Close()
-	// check if connected by pinging db
-	err = db.Ping()
+	conn, err := pgx.Connect(connConfig)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "Unable to establish connection: %v\n", err)
+		os.Exit(1)
 	}
-	return db
+	return conn
 }
