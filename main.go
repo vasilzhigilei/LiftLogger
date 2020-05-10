@@ -19,22 +19,7 @@ const (
 )
 
 func main(){
-	// prints postgresql info to string
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	// opens sql connection to db
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	// defers the closing of the db connection to end of program
-	defer db.Close()
-	// check if connected by pinging db
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
+	db := db_connect()
 	// Declare a new router
 	r := mux.NewRouter()
 
@@ -53,4 +38,25 @@ func main(){
 func handler(w http.ResponseWriter, r *http.Request){
 	// simply pipe "Hello World" into response writer
 	fmt.Fprintf(w, "Hello World!")
+}
+
+// happy to know I can return a pointer without worrying about the object deallocating :)
+func db_connect() *sql.DB{
+	// prints postgresql info to string
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+	// opens sql connection to db
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+	// defers the closing of the db connection to end of program
+	defer db.Close()
+	// check if connected by pinging db
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	return db
 }
