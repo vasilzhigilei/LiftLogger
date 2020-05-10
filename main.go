@@ -1,11 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
-	"os"
-
 	"github.com/gorilla/mux"
+	"net/http"
 
 	"github.com/jackc/pgx"
 )
@@ -20,7 +19,7 @@ const (
 )
 
 func main(){
-	db := db_connect()
+	//db := db_connect()
 	// Declare a new router
 	r := mux.NewRouter()
 
@@ -43,24 +42,9 @@ func handler(w http.ResponseWriter, r *http.Request){
 
 // happy to know I can return a pointer without worrying about the object deallocating :)
 func db_connect(applicationName string) *pgx.Conn{
-	var runtimeParams map[string]string
-	runtimeParams = make(map[string]string)
-	runtimeParams["application_name"] = applicationName
-	connConfig := pgx.ConnConfig{
-		User: "postgres",
-		Password: "password",
-		Host: "localhost",
-		Port: 5433,
-		Database: "liftlogger",
-		TLSConfig: nil,
-		UseFallbackTLS: false,
-		FallbackTLSConfig: nil,
-		RuntimeParams: runtimeParams,
-	}
-	conn, err := pgx.Connect(connConfig)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to establish connection: %v\n", err)
-		os.Exit(1)
+	conn, err := pgx.Connect(context.Background(), "postgres://postgres:password@localhost:5433/liftlogger")
+	if(err != nil){
+		panic(err)
 	}
 	return conn
 }
