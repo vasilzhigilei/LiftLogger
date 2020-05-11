@@ -9,17 +9,13 @@ import (
 	"github.com/jackc/pgx"
 )
 
-// plain text db details, for now
-const (
-	host     = "localhost"
-	port     = 5433
-	user     = "postgres"
-	password = "password"
-	dbname   = "liftlogger"
-)
-
 func main(){
-	//db := db_connect()
+	conn := db_connect()
+	_, err := conn.Exec(context.Background(), "insert into tasks(description) values($1)", "test")
+	if err != nil{
+		panic(err)
+	}
+
 	// Declare a new router
 	r := mux.NewRouter()
 
@@ -41,9 +37,9 @@ func handler(w http.ResponseWriter, r *http.Request){
 }
 
 // happy to know I can return a pointer without worrying about the object deallocating :)
-func db_connect(applicationName string) *pgx.Conn{
+func db_connect() *pgx.Conn{
 	conn, err := pgx.Connect(context.Background(), "postgres://postgres:password@localhost:5433/liftlogger")
-	if(err != nil){
+	if err != nil {
 		panic(err)
 	}
 	return conn
