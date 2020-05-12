@@ -1,24 +1,33 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func main(){
-	conn := db_connect("postgres://postgres:password@localhost:5433/liftlogger")
-	_, err := conn.Exec(context.Background(), "INSERT INTO userdata values($1, $2, $3, $4)",
-		"example@example.com", false, 200, 19)
+	var err error // declare error variable err to avoid :=
+
+	// Connect to database
+	db := NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
+
+	// test insert new user
+	err = db.InsertUser("hi3@hi.com", true)
 	if err != nil{
 		panic(err)
 	}
-	stuff, err := conn.Exec(context.Background(), "SELECT * FROM userdata")
-	if err != nil{
-		panic(err)
+	rows := db.SelectAll()
+	for rows.Next() {
+		var email string
+		var sex bool
+		var weight float32
+		var age float32
+		rows.Scan(&email, &sex, &weight, &age)
+		fmt.Printf("%s %t %f %f", email, sex, weight, age)
 	}
-	fmt.Println(stuff)
+	fmt.Println(rows)
+
 	// Declare a new router
 	r := mux.NewRouter()
 
