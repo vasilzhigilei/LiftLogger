@@ -11,11 +11,16 @@ import (
 
 func main(){
 	conn := db_connect()
-	_, err := conn.Exec(context.Background(), "insert into tasks(description) values($1)", "test")
+	_, err := conn.Exec(context.Background(), "INSERT INTO userdata values($1, $2, $3, $4)",
+		"example@example.com", false, 200, 19)
 	if err != nil{
 		panic(err)
 	}
-
+	stuff, err := conn.Exec(context.Background(), "SELECT * FROM userdata")
+	if err != nil{
+		panic(err)
+	}
+	fmt.Println(stuff)
 	// Declare a new router
 	r := mux.NewRouter()
 
