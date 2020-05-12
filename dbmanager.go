@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/jackc/pgx"
 )
 
@@ -29,7 +30,22 @@ func (d *Database) InsertUser(email string, sex bool) error{
 	return err
 }
 
-func (d *Database) SelectAll() pgx.Rows{
+func (d *Database) SelectAllUsers() pgx.Rows{
 	rows, _ := d.conn.Query(context.Background(), "SELECT email, sex, weight, age FROM userdata")
 	return rows
+}
+
+func (d *Database) PrintAllUsers() {
+	rows := d.SelectAllUsers()
+	for rows.Next() {
+		var email string
+		var sex bool
+		var weight float32
+		var age float32
+		err := rows.Scan(&email, &sex, &weight, &age)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%s %t %f %f\n", email, sex, weight, age)
+	}
 }
