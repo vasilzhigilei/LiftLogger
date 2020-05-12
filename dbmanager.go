@@ -30,6 +30,6 @@ func (d *Database) InsertUser(email string, sex bool) error{
 }
 
 func (d *Database) SelectAll() pgx.Rows{
-	rows, _ := d.conn.Query(context.Background(), "SELECT * FROM userdata")
+	rows, _ := d.conn.Query(context.Background(), "SELECT email, sex, weight, age FROM userdata")
 	return rows
 }

@@ -13,20 +13,20 @@ func main(){
 	db := NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
 
 	// test insert new user
-	err = db.InsertUser("hi3@hi.com", true)
-	if err != nil{
-		panic(err)
-	}
+	err = db.InsertUser("hi1@hi.com", true)
+	checkErr(err)
 	rows := db.SelectAll()
 	for rows.Next() {
 		var email string
 		var sex bool
 		var weight float32
 		var age float32
-		rows.Scan(&email, &sex, &weight, &age)
+		err = rows.Scan(&email, &sex, &weight, &age)
+		if err != nil {
+			panic(err)
+		}
 		fmt.Printf("%s %t %f %f", email, sex, weight, age)
 	}
-	fmt.Println(rows)
 
 	// Declare a new router
 	r := mux.NewRouter()
@@ -46,4 +46,10 @@ func main(){
 func handler(w http.ResponseWriter, r *http.Request){
 	// simply pipe "Hello World" into response writer
 	fmt.Fprintf(w, "Hello World!")
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
