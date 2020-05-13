@@ -34,9 +34,6 @@
                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="#">Strength Standards</a>
-                  </li>
-                  <li class="nav-item">
                      <a class="nav-link" href="#">About</a>
                   </li>
                </ul>
@@ -55,7 +52,7 @@
       </div>
 
       <br>
-      <div class="container">
+      <div id="maincontent" class="container">
          <div class="row">
             <div class="col-md-12 bg-light padding rounded">
                <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -75,7 +72,7 @@
          <br>
          <div class="row">
             <div class="col-md-12 bg-light padding rounded">
-               <form>
+               <form id="analyzeform">
                   <p class="h3">Log lifts</p>
                   <hr/>
                   <div class="row mb-3"> <!-- WEIGHT AGE -->
@@ -106,17 +103,17 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="dl-weight">
+                           <input id="dl-weight" type="text" class="form-control" placeholder="Weight" aria-describedby="dl-weight">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="dl-weight">lbs</span>
+                              <span class="input-group-text">lbs</span>
                            </div>
                         </div>
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="dl-reps">
+                           <input id="dl-reps" type="text" class="form-control" placeholder="Reps" aria-describedby="dl-reps">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="dl-reps">Reps</span>
+                              <span class="input-group-text">Reps</span>
                            </div>
                         </div>
                      </div>
@@ -127,17 +124,17 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="s-weight">
+                           <input id="s-weight" type="text" class="form-control" placeholder="Weight" aria-describedby="s-weight">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="s-weight">lbs</span>
+                              <span class="input-group-text">lbs</span>
                            </div>
                         </div>
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="s-reps">
+                           <input id="s-reps" type="text" class="form-control" placeholder="Reps" aria-describedby="s-reps">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="s-reps">Reps</span>
+                              <span class="input-group-text">Reps</span>
                            </div>
                         </div>
                      </div>
@@ -148,17 +145,17 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="bp-weight">
+                           <input id="bp-weight" type="text" class="form-control" placeholder="Weight" aria-describedby="bp-weight">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="bp-weight">lbs</span>
+                              <span class="input-group-text">lbs</span>
                            </div>
                         </div>
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="bp-reps">
+                           <input id="bp-reps" type="text" class="form-control" placeholder="Reps" aria-describedby="bp-reps">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="bp-reps">Reps</span>
+                              <span class="input-group-text">Reps</span>
                            </div>
                         </div>
                      </div>
@@ -169,17 +166,17 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Weight" aria-describedby="ohp-weight">
+                           <input id="ohp-weight" type="text" class="form-control" placeholder="Weight" aria-describedby="ohp-weight">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="ohp-weight">lbs</span>
+                              <span class="input-group-text">lbs</span>
                            </div>
                         </div>
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input type="text" class="form-control" placeholder="Reps" aria-describedby="ohp-reps">
+                           <input id="ohp-reps" type="text" class="form-control" placeholder="Reps" aria-describedby="ohp-reps">
                            <div class="input-group-append">
-                              <span class="input-group-text" id="ohp-reps">Reps</span>
+                              <span class="input-group-text">Reps</span>
                            </div>
                         </div>
                      </div>
@@ -205,6 +202,11 @@
             }
          });
       </script>
+
+      <!-- run js after html load -->
+      <!-- Local JS -->
+      <script src="js/homepage.js"></script>
+      <script src="js/generate.js"></script>
 
       <!-- Optional JavaScript -->
       <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

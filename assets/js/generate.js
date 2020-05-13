@@ -6,5 +6,5 @@
  * @returns {number} - the one rep max estimate
  */
 function generate1RM(pounds, reps) {
-    return (100 * pounds) / (48.8 + 53.8 * Math.E^(-0.075 * reps))
+    return (100 * pounds) / (48.8 + 53.8 * Math.E**(-0.075 * reps))
 }
