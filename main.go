@@ -2,9 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/dchest/uniuri"
 	"github.com/gorilla/mux"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"net/http"
+	"os"
 )
+
+// global authentication variable
+var authconf = &oauth2.Config{
+	RedirectURL: "http://localhost:8000/callback",
+	ClientID: os.Getenv("GOOGLE_CLIENT_ID"),
+	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	Scopes: []string{
+		"https://www.googleapis.com/auth/userinfo.profile",
+		"https://www.googleapis.com/auth/userinfo.email"},
+	Endpoint: google.Endpoint,
+}
 
 func main(){
 	var err error // declare error variable err to avoid :=
@@ -21,7 +36,7 @@ func main(){
 	// Declare a new router
 	r := mux.NewRouter()
 
-	r.HandleFunc("/hello", handler).Methods("GET")
+	r.HandleFunc("/login", loginHandler).Methods("GET")
 
 	// file directory for file serving
 	staticFileDirectory := http.Dir("./assets/")
@@ -33,10 +48,18 @@ func main(){
 	http.ListenAndServe(":8000", r)
 }
 
-func handler(w http.ResponseWriter, r *http.Request){
-	// simply pipe "Hello World" into response writer
-	fmt.Fprintf(w, "Hello World!")
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	oauthStateString := uniuri.New()
+	url := authconf.AuthCodeURL(oauthStateString)
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
+
+func callbackHandler(w http.ResponseWriter, r *http.Request) {
+	code := r.FormValue(“code”)
+	token, _ := authconf.Exchange(oauth2.NoContext, code)
+	fmt.Fprintf(w, token.AccessToken)
+}
+
 
 func checkErr(err error) {
 	if err != nil {
