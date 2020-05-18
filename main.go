@@ -1,11 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dchest/uniuri"
 	"github.com/gorilla/mux"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -19,6 +22,19 @@ var authconf = &oauth2.Config{
 		"https://www.googleapis.com/auth/userinfo.profile",
 		"https://www.googleapis.com/auth/userinfo.email"},
 	Endpoint: google.Endpoint,
+}
+
+type GoogleUser struct {
+	ID string `json:"id"`
+	Email string `json:"email"`
+	VerifiedEmail bool `json:"verified_email"`
+	Name string `json:"name"`
+	GivenName string `json:"given_name"`
+	FamilyName string `json:"family_name"`
+	Link string `json:"link"`
+	Picture string `json:"picture"`
+	Gender string `json:"gender"`
+	Locale string `json:"locale"`
 }
 
 func main(){
@@ -37,6 +53,7 @@ func main(){
 	r := mux.NewRouter()
 
 	r.HandleFunc("/login", loginHandler).Methods("GET")
+	r.HandleFunc("/callback", callbackHandler).Methods("GET")
 
 	// file directory for file serving
 	staticFileDirectory := http.Dir("./assets/")
@@ -55,11 +72,33 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	code := r.FormValue(“code”)
+	code := r.FormValue("code")
 	token, _ := authconf.Exchange(oauth2.NoContext, code)
-	fmt.Fprintf(w, token.AccessToken)
-}
 
+	if !token.Valid(){
+		fmt.Fprintln(w, "Retreived invalid token")
+	}
+
+	fmt.Fprintln(w, token.AccessToken)
+
+	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		log.Printf("Error getting user from token %s\n", err.Error())
+		return
+	}
+
+	defer response.Body.Close()
+	contents, err := ioutil.ReadAll(response.Body)
+
+	var user *GoogleUser
+	err = json.Unmarshal(contents, &user)
+	if err != nil {
+		log.Printf("Error unmarshaling Google user %s\n", err.Error())
+		return
+	}
+
+	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
+}
 
 func checkErr(err error) {
 	if err != nil {
