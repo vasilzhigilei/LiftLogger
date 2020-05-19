@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -39,6 +40,8 @@ type GoogleUser struct {
 	Locale string `json:"locale"`
 }
 
+var indexTemplate *template.Template
+
 func main(){
 	var err error // declare error variable err to avoid :=
 
@@ -57,20 +60,26 @@ func main(){
 	r.HandleFunc("/login", loginHandler).Methods("GET")
 	r.HandleFunc("/callback", callbackHandler).Methods("GET")
 
+	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 	r.HandleFunc("/", indexHandler).Methods("GET")
 
 	// file directory for file serving
-	//staticFileDirectory := http.Dir("./assets/")
+	staticFileDirectory := http.Dir("./static/")
 	// the prefix is the routing address, the address the user goes to
-	//staticFileHandler := http.StripPrefix("/", http.FileServer(staticFileDirectory))
+	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
 
 	// keep PathPrefix empty
-	//r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
+	r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
 	http.ListenAndServe(":8000", r)
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+type User struct {
+	Username string
+}
 
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	data := User{Username: "Vasil"}
+	indexTemplate.Execute(w, data)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
