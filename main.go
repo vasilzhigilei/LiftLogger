@@ -57,14 +57,20 @@ func main(){
 	r.HandleFunc("/login", loginHandler).Methods("GET")
 	r.HandleFunc("/callback", callbackHandler).Methods("GET")
 
+	r.HandleFunc("/", indexHandler).Methods("GET")
+
 	// file directory for file serving
-	staticFileDirectory := http.Dir("./assets/")
+	//staticFileDirectory := http.Dir("./assets/")
 	// the prefix is the routing address, the address the user goes to
-	staticFileHandler := http.StripPrefix("/", http.FileServer(staticFileDirectory))
+	//staticFileHandler := http.StripPrefix("/", http.FileServer(staticFileDirectory))
 
 	// keep PathPrefix empty
-	r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
+	//r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
 	http.ListenAndServe(":8000", r)
+}
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +119,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
 }
+
+
 
 func checkErr(err error) {
 	if err != nil {
