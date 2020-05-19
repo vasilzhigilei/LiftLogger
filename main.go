@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -43,6 +44,7 @@ type GoogleUser struct {
 var indexTemplate *template.Template
 
 func main(){
+	initCache() // initialize redis cache
 	var err error // declare error variable err to avoid :=
 
 	// Connect to database
@@ -73,12 +75,30 @@ func main(){
 	http.ListenAndServe(":8000", r)
 }
 
+// Store redis connection as a package level variable
+var cache redis.Conn
+
+func initCache() {
+	//conn, err := redis.DialURL("redis://localhost:6379")
+	conn, err := redis.Dial("tcp", "localhost:6379")
+	checkErr(err) // check error
+
+	// assign connection to package level 'cache' variable
+	cache = conn
+}
+
 type User struct {
 	Username string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	data := User{Username: "Vasil"}
+	c, err := r.Cookie("oauthstate")
+	data := User{Username: "Not logged in"}
+
+	response, err := cache.Do("GET", c.Value)
+	if err == nil {
+		data.Username = response.(string)
+	}
 	indexTemplate.Execute(w, data)
 }
 
@@ -126,6 +146,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	_, err = cache.Do("SETEX", c, time.Now().Add(365 * 24 * time.Hour), user.Email)
+	checkErr(err)
 	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
 }
 
