@@ -92,6 +92,16 @@ type User struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	keys, err := redis.Strings(cache.Do("KEYS", "*"))
+	checkErr(err)
+	for _, key := range keys {
+		fmt.Println(key)
+		value, err := cache.Do("GET", key)
+		checkErr(err)
+		fmt.Println(fmt.Sprintf("%s", value))
+	}
+	fmt.Println()
+
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -113,7 +123,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		indexTemplate.Execute(w, data)
 		return
 	}else {
-		data := User{Username: response.(string)}
+		data := User{Username: fmt.Sprintf("%s",response)}
 		indexTemplate.Execute(w, data)
 	}
 }
@@ -144,7 +154,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Retreived invalid token")
 	}
 
-	fmt.Fprintln(w, token.AccessToken)
+	//fmt.Fprintln(w, token.AccessToken)
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
@@ -163,9 +173,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	state, err := r.Cookie("oauthstate") // INTERESTING, apparently cookie is the Value, don't do cookie.Value!!!
-	_, err = cache.Do("SETEX", state, 365 * 24 * 60 * 60, user.Email)
+	_, err = cache.Do("SETEX", state.Value, 365 * 24 * 60 * 60, user.Email)
 	checkErr(err)
-	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
+	//fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func checkErr(err error) {
