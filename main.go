@@ -93,13 +93,29 @@ type User struct {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("oauthstate")
-	data := User{Username: "Not logged in"}
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// If the cookie is not set, set to not logged in
+			data := User{Username: "Not logged in"}
+			indexTemplate.Execute(w, data)
+			return
+		}
+		// For any other type of error, return a bad request status
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	response, err := cache.Do("GET", c.Value)
-	if err == nil {
-		data.Username = response.(string)
+	checkErr(err)
+	if response == nil {
+		// If the session token is not present in cache, set to not logged in
+		data := User{Username: "Not logged in"}
+		indexTemplate.Execute(w, data)
+		return
+	}else {
+		data := User{Username: response.(string)}
+		indexTemplate.Execute(w, data)
 	}
-	indexTemplate.Execute(w, data)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -146,14 +162,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c, err := r.Cookie("oauthstate")
-	checkErr(err)
-	_, err = cache.Do("SETEX", c, time.Now().Add(365 * 24 * time.Hour), user.Email)
+	fmt.Println(token.AccessToken, time.Now().Add(365 * 24 * time.Hour), user.Email)
+	_, err = cache.Do("SETEX", token.AccessToken, time.Now().Add(365 * 24 * time.Hour), user.Email)
 	checkErr(err)
 	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
 }
-
-
 
 func checkErr(err error) {
 	if err != nil {
