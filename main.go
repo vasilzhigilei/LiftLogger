@@ -11,7 +11,6 @@ import (
 	"golang.org/x/oauth2/google"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -22,9 +21,7 @@ var authconf = &oauth2.Config{
 	RedirectURL: "http://localhost:8000/callback",
 	ClientID: os.Getenv("GOOGLE_CLIENT_ID"),
 	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-	Scopes: []string{
-		"https://www.googleapis.com/auth/userinfo.profile",
-		"https://www.googleapis.com/auth/userinfo.email"},
+	Scopes: []string{"https://www.googleapis.com/auth/userinfo.email"},
 	Endpoint: google.Endpoint,
 }
 
@@ -92,16 +89,6 @@ type User struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	keys, err := redis.Strings(cache.Do("KEYS", "*"))
-	checkErr(err)
-	for _, key := range keys {
-		fmt.Println(key)
-		value, err := cache.Do("GET", key)
-		checkErr(err)
-		fmt.Println(fmt.Sprintf("%s", value))
-	}
-	fmt.Println()
-
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -154,29 +141,36 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Retreived invalid token")
 	}
 
-	//fmt.Fprintln(w, token.AccessToken)
-
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
-	if err != nil {
-		log.Printf("Error getting user from token %s\n", err.Error())
-		return
-	}
+	checkErr(err)
 
 	defer response.Body.Close()
 	contents, err := ioutil.ReadAll(response.Body)
+	checkErr(err)
 
 	var user *GoogleUser
 	err = json.Unmarshal(contents, &user)
-	if err != nil {
-		log.Printf("Error unmarshaling Google user %s\n", err.Error())
-		return
-	}
+	checkErr(err)
 
-	state, err := r.Cookie("oauthstate") // INTERESTING, apparently cookie is the Value, don't do cookie.Value!!!
+	state, err := r.Cookie("oauthstate")
+	checkErr(err)
 	_, err = cache.Do("SETEX", state.Value, 365 * 24 * 60 * 60, user.Email)
 	checkErr(err)
-	//fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
+
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+}
+
+func cachePrintAll(){
+	// unused function, primarily for debugging
+	keys, err := redis.Strings(cache.Do("KEYS", "*"))
+	checkErr(err)
+	for _, key := range keys {
+		fmt.Println(key)
+		value, err := cache.Do("GET", key)
+		checkErr(err)
+		fmt.Println(fmt.Sprintf("%s", value))
+	}
+	fmt.Println()
 }
 
 func checkErr(err error) {
