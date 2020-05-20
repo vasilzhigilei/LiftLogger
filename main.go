@@ -162,8 +162,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(token.AccessToken, time.Now().Add(365 * 24 * time.Hour), user.Email)
-	_, err = cache.Do("SETEX", token.AccessToken, time.Now().Add(365 * 24 * time.Hour), user.Email)
+	state, err := r.Cookie("oauthstate") // INTERESTING, apparently cookie is the Value, don't do cookie.Value!!!
+	_, err = cache.Do("SETEX", state, 365 * 24 * 60 * 60, user.Email)
 	checkErr(err)
 	fmt.Fprintf(w, "Email: %s\nName: %s\nImage link: %s\n", user.Email, user.Name, user.Picture)
 }
