@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx"
+	"time"
 )
 
 /**
@@ -27,8 +28,26 @@ func NewDatabase(connString string) *Database{
 /**
 Insert user, if conflict (user already exists), do nothing
  */
-func (d *Database) InsertUser(email string) error{
+func (d *Database) InsertUser(email string) error {
 	_, err := d.conn.Exec(context.Background(), "INSERT INTO userdata values($1) ON CONFLICT DO NOTHING", email)
+	return err
+}
+
+type LiftData struct {
+	email string
+	day time.Time
+	sex bool
+	logs map[string]interface{} // in order to include ints and floats
+}
+
+func (d *Database) LogLifts(ld LiftData) error {
+	// construct json to append to json[] in the database
+	liftstr := "{\"day\": " + ld.day.String()
+	for key, value := range ld.logs {
+		liftstr += ", \"" + key + "\": " + value.(string)
+	}
+	liftstr += "}"
+	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET logs = logs || " + liftstr)
 	return err
 }
 
