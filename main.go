@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
-	"github.com/meshhq/golang-html-template-tutorial/assets"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"html/template"
@@ -50,8 +49,12 @@ type PageData struct {
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
-	loginbtnHTML = template.HTML(assets.MustAsset("templates/loginbtn.html"))
-	logoutbtnHTML = template.HTML(assets.MustAssetString("templates/logoutbtn.html"))
+	
+	content, err := ioutil.ReadFile("templates/loginbtn.html")
+	checkErr(err)
+	loginbtnHTML = template.HTML(string(content))
+	content, err = ioutil.ReadFile("templates/logoutbtn.html")
+	logoutbtnHTML = template.HTML(string(content))
 	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 
 	// Connect to database
@@ -96,13 +99,14 @@ func initCache() {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
+		// If the session token is not present in cache, set to not logged in
+		// For any other type of error, return a bad request status
 		if err == http.ErrNoCookie {
 			// If the cookie is not set, set to not logged in
 			data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 			indexTemplate.Execute(w, data)
 			return
 		}
-		// For any other type of error, return a bad request status
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -110,7 +114,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := cache.Do("GET", c.Value)
 	checkErr(err)
 	if response == nil {
-		// If the session token is not present in cache, set to not logged in
 		data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 		indexTemplate.Execute(w, data)
 		return
