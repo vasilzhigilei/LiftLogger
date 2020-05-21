@@ -49,7 +49,7 @@ type PageData struct {
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
-	
+
 	content, err := ioutil.ReadFile("templates/loginbtn.html")
 	checkErr(err)
 	loginbtnHTML = template.HTML(string(content))
@@ -71,6 +71,7 @@ func main(){
 
 	r.HandleFunc("/login", loginHandler).Methods("GET")
 	r.HandleFunc("/callback", callbackHandler).Methods("GET")
+	r.HandleFunc("/logout", logoutHandler).Methods("GET")
 
 	r.HandleFunc("/", indexHandler).Methods("GET")
 
@@ -127,6 +128,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	oauthStateString := generateStateOauthCookie(w)
 	url := authconf.AuthCodeURL(oauthStateString)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+}
+
+func logoutHandler(w http.ResponseWriter, r * http.Request) {
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	_, err = cache.Do("DEL", c.Value)
+	checkErr(err)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func generateStateOauthCookie(w http.ResponseWriter) string {
