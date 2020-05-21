@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
+	"github.com/meshhq/golang-html-template-tutorial/assets"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"html/template"
@@ -39,10 +40,19 @@ type GoogleUser struct {
 }
 
 var indexTemplate *template.Template
+var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
+
+type PageData struct {
+	Username string
+	Loginoutbtn template.HTML
+}
 
 func main(){
-	initCache() // initialize redis cache
 	var err error // declare error variable err to avoid :=
+	initCache() // initialize redis cache
+	loginbtnHTML = template.HTML(assets.MustAsset("templates/loginbtn.html"))
+	logoutbtnHTML = template.HTML(assets.MustAssetString("templates/logoutbtn.html"))
+	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 
 	// Connect to database
 	db := NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
@@ -59,7 +69,6 @@ func main(){
 	r.HandleFunc("/login", loginHandler).Methods("GET")
 	r.HandleFunc("/callback", callbackHandler).Methods("GET")
 
-	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 	r.HandleFunc("/", indexHandler).Methods("GET")
 
 	// file directory for file serving
@@ -84,16 +93,12 @@ func initCache() {
 	cache = conn
 }
 
-type User struct {
-	Username string
-}
-
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
 		if err == http.ErrNoCookie {
 			// If the cookie is not set, set to not logged in
-			data := User{Username: "Not logged in"}
+			data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 			indexTemplate.Execute(w, data)
 			return
 		}
@@ -106,11 +111,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	checkErr(err)
 	if response == nil {
 		// If the session token is not present in cache, set to not logged in
-		data := User{Username: "Not logged in"}
+		data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 		indexTemplate.Execute(w, data)
 		return
 	}else {
-		data := User{Username: fmt.Sprintf("%s",response)}
+		data := PageData{Username: fmt.Sprintf("%s",response), Loginoutbtn: logoutbtnHTML}
 		indexTemplate.Execute(w, data)
 	}
 }
@@ -138,7 +143,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	token, _ := authconf.Exchange(oauth2.NoContext, code)
 
 	if !token.Valid(){
-		fmt.Fprintln(w, "Retreived invalid token")
+		fmt.Fprintln(w, "Retrieved invalid token")
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
