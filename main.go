@@ -38,6 +38,8 @@ type GoogleUser struct {
 	Locale string `json:"locale"`
 }
 
+var db *Database // user database
+
 var indexTemplate *template.Template
 var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 
@@ -58,10 +60,10 @@ func main(){
 	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 
 	// Connect to database
-	db := NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
+	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
 
 	// test insert new user
-	//err = db.InsertUser("example@example.com", true)
+	//err = db.InsertUser("example@example.com")
 	checkErr(err)
 
 	db.PrintAllUsers()
@@ -172,6 +174,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	state, err := r.Cookie("oauthstate")
 	checkErr(err)
 	_, err = cache.Do("SETEX", state.Value, 365 * 24 * 60 * 60, user.Email)
+	checkErr(err)
+
+	// insert user into postgresql, auto does check if already exists
+	err = db.InsertUser(user.Email)
 	checkErr(err)
 
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)

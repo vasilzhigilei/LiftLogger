@@ -24,9 +24,11 @@ func NewDatabase(connString string) *Database{
 	return d
 }
 
-func (d *Database) InsertUser(email string, sex bool) error{
-	_, err := d.conn.Exec(context.Background(), "INSERT INTO userdata values($1, $2)",
-		email, sex)
+/**
+Insert user, if conflict (user already exists), do nothing
+ */
+func (d *Database) InsertUser(email string) error{
+	_, err := d.conn.Exec(context.Background(), "INSERT INTO userdata values($1) ON CONFLICT DO NOTHING", email)
 	return err
 }
 
