@@ -21,9 +21,8 @@ function submitForm(event){
         insides += '<div class=\"row mb-3\"><div class="col-sm-4 col-md-2"><p>Overhead Press: ' + maximums["ohp_max"] + '</p></div></div>'
     }
 
-    $("#maincontent").append('<br><div class="row"><div class="col-md-12 bg-light padding rounded">' +
-        insides +
-        '</div></div>')
+    document.getElementById("results").innerHTML = '<br><div class="row"><div class="col-md-12 bg-light padding rounded">' +
+        insides + '</div></div>'
 }
 
 function getMaximums() {
