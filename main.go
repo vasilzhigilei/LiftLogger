@@ -56,7 +56,9 @@ func main(){
 	checkErr(err)
 	loginbtnHTML = template.HTML(string(content))
 	content, err = ioutil.ReadFile("templates/logoutbtn.html")
+	checkErr(err)
 	logoutbtnHTML = template.HTML(string(content))
+
 	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 
 	// Connect to database
@@ -67,12 +69,12 @@ func main(){
 	checkErr(err)
 
 	//db.PrintAllUsers()
-	lifts := LiftData{
+	/*lifts := LiftData{
 		email: "diamondmine360@gmail.com",
 		day:   time.Now(),
-		logs:  {"dl_weight": 250, "dl_reps":5},
-	}
-	db.LogLifts()
+		logs:  {"dl_weight": 250, "dl_reps":5}.
+	}*/
+	//db.LogLifts()
 
 	// Declare a new router
 	r := mux.NewRouter()
