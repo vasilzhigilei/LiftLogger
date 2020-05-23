@@ -66,7 +66,13 @@ func main(){
 	//err = db.InsertUser("example@example.com")
 	checkErr(err)
 
-	db.PrintAllUsers()
+	//db.PrintAllUsers()
+	lifts := LiftData{
+		email: "diamondmine360@gmail.com",
+		day:   time.Now(),
+		logs:  {"dl_weight": 250, "dl_reps":5},
+	}
+	db.LogLifts()
 
 	// Declare a new router
 	r := mux.NewRouter()

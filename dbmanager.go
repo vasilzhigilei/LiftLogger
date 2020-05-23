@@ -36,18 +36,18 @@ func (d *Database) InsertUser(email string) error {
 type LiftData struct {
 	email string
 	day time.Time
-	sex bool
-	logs map[string]interface{} // in order to include ints and floats
+	logs map[string]float32 // allow floats, but lifting data will be stored as ints (weight will be float
 }
 
 func (d *Database) LogLifts(ld LiftData) error {
 	// construct json to append to json[] in the database
-	liftstr := "{\"day\": " + ld.day.String()
+	liftstr := fmt.Sprintf("{\"day\": %s", ld.day.String())
 	for key, value := range ld.logs {
-		liftstr += ", \"" + key + "\": " + value.(string)
+		liftstr += fmt.Sprintf(", \"%s\": %f", key, value)
 	}
 	liftstr += "}"
-	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET logs = logs || " + liftstr)
+	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET logs = logs || " + liftstr +
+		" WHERE email IS " + ld.email)
 	return err
 }
 
