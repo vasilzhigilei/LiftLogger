@@ -18,6 +18,10 @@
     margin-top: 6px;
 }
 
+.nomargin {
+    margin: 0 !important;
+}
+
 .padding {
     padding: 15px;
 }

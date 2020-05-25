@@ -11,13 +11,14 @@ function submitForm(event){
 }
 
 function buildHTML(data){
-    htmlstring = "<br><div class=\"row\"><div class=\"col-md-12 bg-light padding rounded\">"
+    htmlstring = "<br><div class=\"row\"><div class=\"col-md-12 bg-light padding rounded\">" +
+            "<p class=\"h3\">Estimated 1 Rep Maxes</p><hr/>"
     for(i = 0; i < data.length; ++i){
         datum = data[i]
         if(datum[0] == "Personal")
             continue
         max = Math.round(generate1RM(datum[1], datum[2]))
-        rowhtml = `<p class="h3">Estimated 1 Rep Maxes</p><hr/><div class=\"row mb-3\">` +
+        rowhtml = `<div class=\"row mb-3\">` +
             `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum[0]}</p></div>` +
             `<div class=\"col-sm-4 col-md-3\"><p class="h5">${max}lbs</p></div>` +
             `</div>`
