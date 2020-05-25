@@ -14,16 +14,27 @@ function submitForm(event){
 
 function getData() {
     inputblocks = document.querySelectorAll(".inputblock")
-    results = []
+    data = []
     for(var i = 0; i < inputblocks.length; i++){
-        fields = inputblocks[i].getElementsByClassName("form-control")
-        fields[0].validate()
-        for(field in fields){
-            if(isNaN(field) || field != "")
+        result = getFields(inputblocks[i])
+        if(!isNaN(result)) {
+            data.append([inputblocks[i].id, result[0], result[1]])
         }
-        results.append([inputblocks[i].id, ])
     }
 
 
     return {dl_max, s_max, bp_max, ohp_max}
+}
+
+function getFields(inputblock){
+    fields = inputblock.getElementsByClassName("form-control")
+    result = []
+    for(field in fields){
+        if(isNaN(field.value) || field.value == ""){
+            return NaN
+        }else {
+            result.append(parseFloat(field.value))
+        }
+    }
+    return result
 }
