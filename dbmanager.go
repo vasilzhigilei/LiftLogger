@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx"
 	"time"
@@ -46,9 +47,18 @@ func (d *Database) LogLifts(ld LiftData) error {
 		liftstr += fmt.Sprintf(", \"%s\": %f", key, value)
 	}
 	liftstr += "}"
-	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET logs = logs || " + liftstr +
+	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET lifts = lifts || " + liftstr +
 		" WHERE email IS " + ld.email)
 	return err
+}
+
+func (d *Database) GetLatest(email string) []byte{
+	result, err := d.conn.Exec(context.Background(), "SELECT latest FROM userdata WHERE email = " + email)
+	checkErr(err)
+	var unmarshalled []byte
+	err = json.Unmarshal(result, &unmarshalled)
+	checkErr(err)
+	return unmarshalled
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{
