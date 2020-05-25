@@ -5,7 +5,7 @@ form.addEventListener('submit', submitForm);
 function submitForm(event){
     event.preventDefault()
     data = getData()
-    if(data.length < 0)
+    if(data.length < 1)
         return // if no data, don't do anything
     document.getElementById("results").innerHTML = buildHTML(data)
 }
@@ -17,8 +17,10 @@ function buildHTML(data){
         if(datum[0] == "Personal")
             continue
         max = Math.round(generate1RM(datum[1], datum[2]))
-        rowhtml = `<div class=\"row mb-3\"><div class=\"col-sm-4 col-md-2\">` +
-            `<p>${datum[0]}: ${max}</p></div></div>`
+        rowhtml = `<p class="h3">Estimated 1 Rep Maxes</p><hr/><div class=\"row mb-3\">` +
+            `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum[0]}</p></div>` +
+            `<div class=\"col-sm-4 col-md-3\"><p class="h5">${max}lbs</p></div>` +
+            `</div>`
         htmlstring += rowhtml
     }
     htmlstring += "</div></div>"
@@ -31,8 +33,8 @@ function getData() {
     data = []
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
-        if(!isNaN(result)) {
-            data.append([inputblocks[i].id, result[0], result[1]])
+        if(result.length > 0) {
+            data.push([inputblocks[i].id, result[0], result[1]])
         }
     }
     return data
@@ -45,8 +47,8 @@ function getFields(inputblock){
     for(i = 0; i < fields.length; ++i){
         field = fields[i]
         if(isNaN(field.value) || field.value == ""){
-            return NaN
-        }else {
+            return []
+        } else {
             result.push(parseFloat(field.value))
         }
     }
