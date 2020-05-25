@@ -3,15 +3,26 @@ var form = document.getElementById("analyzeform")
 form.addEventListener('submit', submitForm);
 
 function submitForm(event){
-    // ugh this code is UGLY! Will have to DEFINITELY redo all of this!
     event.preventDefault()
     data = getData()
     if(data.length < 0)
         return // if no data, don't do anything
-    for(datum in data){
+    document.getElementById("results").innerHTML = buildHTML(data)
+}
 
+function buildHTML(data){
+    htmlstring = "<br><div class=\"row\"><div class=\"col-md-12 bg-light padding rounded\">"
+    for(i = 0; i < data.length; ++i){
+        datum = data[i]
+        if(datum[0] == "Personal")
+            continue
+        max = Math.round(generate1RM(datum[1], datum[2]))
+        rowhtml = `<div class=\"row mb-3\"><div class=\"col-sm-4 col-md-2\">` +
+            `<p>${datum[0]}: ${max}</p></div></div>`
+        htmlstring += rowhtml
     }
-
+    htmlstring += "</div></div>"
+    return htmlstring
 }
 
 function getData() {
@@ -31,11 +42,12 @@ function getFields(inputblock){
     // helper function for getData
     fields = inputblock.getElementsByClassName("form-control")
     result = []
-    for(field in fields){
+    for(i = 0; i < fields.length; ++i){
+        field = fields[i]
         if(isNaN(field.value) || field.value == ""){
             return NaN
         }else {
-            result.append(parseFloat(field.value))
+            result.push(parseFloat(field.value))
         }
     }
     return result
@@ -62,7 +74,7 @@ function setInputFilter(textbox, inputFilter) {
 idsInt = ["dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
 
 // limit lift weights/reps from 0 to 1200
-for(i = 0; i < idsInt.length; i++) {
+for(i = 0; i < idsInt.length; ++i) {
     setInputFilter(document.getElementById(idsInt[i]), function (value) {
         return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1200);
     });
