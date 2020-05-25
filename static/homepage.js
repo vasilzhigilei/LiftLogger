@@ -59,14 +59,14 @@ function setInputFilter(textbox, inputFilter) {
     });
 }
 
-idsInt = ["dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "age"]
+idsInt = ["dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
 
 // limit lift weights/reps from 0 to 1200
-for(id in idsInt) {
-    setInputFilter(document.getElementById(id), function (value) {
+for(i = 0; i < idsInt.length; i++) {
+    setInputFilter(document.getElementById(idsInt[i]), function (value) {
         return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 1200);
     });
 }
 // limit input of person weight to two decimal places and no more than 1000 (big upper limit :))
-setInputFilter(document.getElementById("currencyTextBox"), function(value) {
+setInputFilter(document.getElementById("u-weight"), function(value) {
     return /^-?\d*[.,]?\d{0,2}$/.test(value) && (value === "" || parseFloat(value) <= 1000); });
