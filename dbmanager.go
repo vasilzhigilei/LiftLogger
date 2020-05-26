@@ -53,8 +53,9 @@ func (d *Database) LogLifts(ld LiftData) error {
 }
 
 type LatestData struct {
-	weight float32
+	sex bool
 	age uint8
+	weight float32
 	dl_weight uint8
 	dl_reps uint8
 	s_weight uint8
@@ -65,13 +66,22 @@ type LatestData struct {
 	ohp_reps uint8
 }
 
-func (d *Database) GetLatest(email string) *LatestData{
-	result, err := d.conn.Exec(context.Background(), "SELECT weight, age, latest FROM userdata WHERE email = " + email)
+func (d *Database) GetUser(email string) *LatestData{
+	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = " + email)
 	checkErr(err)
-	var latest *LatestData
-	err = json.Unmarshal(result, &latest)
+	var sex bool
+	var age uint8
+	var latestlifts []byte
+	for rows.Next() {
+		err = rows.Scan(&sex, &age, &latestlifts)
+		checkErr(err)
+	}
+	var latestdata *LatestData
+	latestdata.sex = sex
+	latestdata.age = age
+	err = json.Unmarshal(latestlifts, &latestdata)
 	checkErr(err)
-	return latest
+	return latestdata
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{
