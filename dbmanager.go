@@ -53,32 +53,32 @@ func (d *Database) LogLifts(ld LiftData) error {
 }
 
 type LatestData struct {
-	sex bool
-	age uint8
-	weight float32
-	dl_weight uint8
-	dl_reps uint8
-	s_weight uint8
-	s_reps uint8
-	bp_weight uint8
-	bp_reps uint8
-	ohp_weight uint8
-	ohp_reps uint8
+	Sex bool
+	Age int
+	Weight float32
+	DLWeight int
+	DLReps int
+	SWeight int
+	SReps int
+	BPWeight int
+	BPReps int
+	OHPWeight int
+	OHPReps int
 }
 
 func (d *Database) GetUser(email string) *LatestData{
 	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = " + email)
 	checkErr(err)
 	var sex bool
-	var age uint8
+	var age int
 	var latestlifts []byte
 	for rows.Next() {
 		err = rows.Scan(&sex, &age, &latestlifts)
 		checkErr(err)
 	}
 	var latestdata *LatestData
-	latestdata.sex = sex
-	latestdata.age = age
+	latestdata.Sex = sex
+	latestdata.Age = age
 	err = json.Unmarshal(latestlifts, &latestdata)
 	checkErr(err)
 	return latestdata

@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"reflect"
 	"time"
 )
 
@@ -154,6 +155,14 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}else {
 		data.Username = fmt.Sprintf("%s",response)
 		data.Loginoutbtn = logoutbtnHTML
+		latestdata := db.GetUser(data.Username)
+		val := reflect.ValueOf(latestdata)
+		fields := val.Type()
+		for i := 0; i < val.NumField(); i++ {
+			if val.Field(i).Interface() != nil {
+				reflections
+			}
+		}
 		indexTemplate.Execute(w, data)
 	}
 }
