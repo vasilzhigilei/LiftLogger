@@ -43,11 +43,6 @@ var db *Database // user database
 var indexTemplate *template.Template
 var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 
-type PageData struct {
-	Username string
-	Loginoutbtn template.HTML
-}
-
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
@@ -107,14 +102,43 @@ func initCache() {
 	cache = conn
 }
 
+type PageData struct {
+	Username string
+	Loginoutbtn template.HTML
+	Sex string
+	Age string
+	Weight string
+	DLWeight string
+	DLReps string
+	SWeight string
+	SReps string
+	BPWeight string
+	BPReps string
+	OHPWeight string
+	OHPReps string
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	data := PageData{
+		Username:    "Not Logged In",
+		Loginoutbtn: loginbtnHTML,
+		Age:         "Age",
+		Weight:      "Weight",
+		DLWeight:   "Weight",
+		DLReps:     "Reps",
+		SWeight:    "Weight",
+		SReps:      "Reps",
+		BPWeight:   "Weight",
+		BPReps:     "Reps",
+		OHPWeight:  "Weight",
+		OHPReps:    "Reps",
+	}
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
 		// If the session token is not present in cache, set to not logged in
 		// For any other type of error, return a bad request status
 		if err == http.ErrNoCookie {
 			// If the cookie is not set, set to not logged in
-			data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 			indexTemplate.Execute(w, data)
 			return
 		}
@@ -125,11 +149,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := cache.Do("GET", c.Value)
 	checkErr(err)
 	if response == nil {
-		data := PageData{Username: "Not logged in", Loginoutbtn: loginbtnHTML}
 		indexTemplate.Execute(w, data)
 		return
 	}else {
-		data := PageData{Username: fmt.Sprintf("%s",response), Loginoutbtn: logoutbtnHTML}
+		data.Username = fmt.Sprintf("%s",response)
+		data.Loginoutbtn = logoutbtnHTML
 		indexTemplate.Execute(w, data)
 	}
 }
