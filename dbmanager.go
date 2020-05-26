@@ -52,13 +52,26 @@ func (d *Database) LogLifts(ld LiftData) error {
 	return err
 }
 
-func (d *Database) GetLatest(email string) []byte{
-	result, err := d.conn.Exec(context.Background(), "SELECT latest FROM userdata WHERE email = " + email)
+type LatestData struct {
+	weight float32
+	age uint8
+	dl_weight uint8
+	dl_reps uint8
+	s_weight uint8
+	s_reps uint8
+	bp_weight uint8
+	bp_reps uint8
+	ohp_weight uint8
+	ohp_reps uint8
+}
+
+func (d *Database) GetLatest(email string) *LatestData{
+	result, err := d.conn.Exec(context.Background(), "SELECT weight, age, latest FROM userdata WHERE email = " + email)
 	checkErr(err)
-	var unmarshalled []byte
-	err = json.Unmarshal(result, &unmarshalled)
+	var latest *LatestData
+	err = json.Unmarshal(result, &latest)
 	checkErr(err)
-	return unmarshalled
+	return latest
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{
