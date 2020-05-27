@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx"
+	"strconv"
 	"time"
 )
 
@@ -37,7 +38,7 @@ func (d *Database) InsertUser(email string) error {
 type LiftData struct {
 	email string
 	day time.Time
-	logs map[string]float32 // allow floats, but lifting data will be stored as ints (weight will be float
+	logs map[string]float32 // allow floats, but lifting data will be stored as ints (weight will be float)
 }
 
 func (d *Database) LogLifts(ld LiftData) error {
@@ -52,21 +53,7 @@ func (d *Database) LogLifts(ld LiftData) error {
 	return err
 }
 
-type LatestData struct {
-	Sex bool
-	Age int
-	Weight float32
-	DLWeight int
-	DLReps int
-	SWeight int
-	SReps int
-	BPWeight int
-	BPReps int
-	OHPWeight int
-	OHPReps int
-}
-
-func (d *Database) GetUser(email string) *LatestData{
+func (d *Database) GetUser(email string) *PageData{
 	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = " + email)
 	checkErr(err)
 	var sex bool
@@ -76,12 +63,16 @@ func (d *Database) GetUser(email string) *LatestData{
 		err = rows.Scan(&sex, &age, &latestlifts)
 		checkErr(err)
 	}
-	var latestdata *LatestData
-	latestdata.Sex = sex
-	latestdata.Age = age
-	err = json.Unmarshal(latestlifts, &latestdata)
+	var pagedata *PageData
+	if sex {
+		pagedata.Sex = "Female"
+	}else {
+		pagedata.Sex = "Male"
+	}
+	pagedata.Age = strconv.Itoa(age)
+	err = json.Unmarshal(latestlifts, &pagedata)
 	checkErr(err)
-	return latestdata
+	return pagedata
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{
