@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx"
-	"strconv"
 	"time"
 )
 
@@ -54,7 +53,7 @@ func (d *Database) LogLifts(ld LiftData) error {
 }
 
 func (d *Database) GetUser(email string) *PageData{
-	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = " + email)
+	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = '" + email + "';")
 	checkErr(err)
 	var sex bool
 	var age int
@@ -63,16 +62,12 @@ func (d *Database) GetUser(email string) *PageData{
 		err = rows.Scan(&sex, &age, &latestlifts)
 		checkErr(err)
 	}
-	var pagedata *PageData
-	if sex {
-		pagedata.Sex = "Female"
-	}else {
-		pagedata.Sex = "Male"
-	}
-	pagedata.Age = strconv.Itoa(age)
+	pagedata := PageData{}
+	pagedata.Sex = sex
+	pagedata.Age = age
 	err = json.Unmarshal(latestlifts, &pagedata)
 	checkErr(err)
-	return pagedata
+	return &pagedata
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{

@@ -13,7 +13,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"reflect"
 	"time"
 )
 
@@ -106,33 +105,33 @@ func initCache() {
 type PageData struct {
 	Username string
 	Loginoutbtn template.HTML
-	Sex string
-	Age string
-	Weight string
-	DLWeight string
-	DLReps string
-	SWeight string
-	SReps string
-	BPWeight string
-	BPReps string
-	OHPWeight string
-	OHPReps string
+	Sex bool
+	Age int
+	Weight float32
+	DLWeight int
+	DLReps int
+	SWeight int
+	SReps int
+	BPWeight int
+	BPReps int
+	OHPWeight int
+	OHPReps int
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Username:    "Not Logged In",
 		Loginoutbtn: loginbtnHTML,
-		Age:         "Age",
-		Weight:      "Weight",
-		DLWeight:   "Weight",
-		DLReps:     "Reps",
-		SWeight:    "Weight",
-		SReps:      "Reps",
-		BPWeight:   "Weight",
-		BPReps:     "Reps",
-		OHPWeight:  "Weight",
-		OHPReps:    "Reps",
+		Age:         21,
+		Weight:      190,
+		DLWeight:   200,
+		DLReps:     5,
+		SWeight:    185,
+		SReps:      5,
+		BPWeight:   135,
+		BPReps:     5,
+		OHPWeight:  95,
+		OHPReps:    5,
 	}
 	c, err := r.Cookie("oauthstate")
 	if err != nil {
@@ -153,16 +152,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		indexTemplate.Execute(w, data)
 		return
 	}else {
-		data.Username = fmt.Sprintf("%s",response)
+		fmt.Println(fmt.Sprintf("%s", response))
+		data := db.GetUser(fmt.Sprintf("%s", response))
+		data.Username = fmt.Sprintf("%s", response)
 		data.Loginoutbtn = logoutbtnHTML
-		latestdata := db.GetUser(data.Username)
-		val := reflect.ValueOf(latestdata)
-		fields := val.Type()
-		for i := 0; i < val.NumField(); i++ {
-			if val.Field(i).Interface() != nil {
-				reflections
-			}
-		}
 		indexTemplate.Execute(w, data)
 	}
 }
