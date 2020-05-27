@@ -122,16 +122,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Username:    "Not Logged In",
 		Loginoutbtn: loginbtnHTML,
-		Age:         21,
-		Weight:      190,
-		DLWeight:   200,
-		DLReps:     5,
-		SWeight:    185,
-		SReps:      5,
-		BPWeight:   135,
-		BPReps:     5,
-		OHPWeight:  95,
-		OHPReps:    5,
 	}
 	c, err := r.Cookie("oauthstate")
 	if err != nil {

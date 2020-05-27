@@ -73,7 +73,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="u-weight" type="text" class="form-control" placeholder="Weight" value="{{ .Weight }}" aria-describedby="u-weight">
+                           <input id="u-weight" type="text" class="form-control" placeholder="Weight" value="{{if ne .Weight 0.0 }}{{ .Weight }}{{ end }}" aria-describedby="u-weight">
                            <div class="input-group-append">
                               <span class="input-group-text" id="u-weight">lbs</span>
                            </div>
@@ -81,7 +81,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="u-age" type="text" class="form-control" placeholder="Age" value="{{ .Age }}" aria-describedby="u-age">
+                           <input id="u-age" type="text" class="form-control" placeholder="Age" value="{{if ne .Age 0 }}{{ .Age }}{{ end }}" aria-describedby="u-age">
                            <div class="input-group-append">
                               <span class="input-group-text" id="u-age">Years</span>
                            </div>
@@ -95,7 +95,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="dl-weight" type="text" class="form-control" placeholder="Weight" value="{{ .DLWeight }}" aria-describedby="dl-weight">
+                           <input id="dl-weight" type="text" class="form-control" placeholder="Weight" value="{{if ne .DLWeight 0 }}{{ .DLWeight }}{{ end }}" aria-describedby="dl-weight">
                            <div class="input-group-append">
                               <span class="input-group-text">lbs</span>
                            </div>
@@ -103,7 +103,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="dl-reps" type="text" class="form-control" placeholder="Reps" value="{{ .DLReps }}" aria-describedby="dl-reps">
+                           <input id="dl-reps" type="text" class="form-control" placeholder="Reps" value="{{if ne .DLReps 0 }}{{ .DLReps }}{{ end }}" aria-describedby="dl-reps">
                            <div class="input-group-append">
                               <span class="input-group-text">Reps</span>
                            </div>
@@ -116,7 +116,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="s-weight" type="text" class="form-control" placeholder="Weight" value="{{ .SWeight }}" aria-describedby="s-weight">
+                           <input id="s-weight" type="text" class="form-control" placeholder="Weight" value="{{if ne .SWeight 0 }}{{ .SWeight }}{{ end }}" aria-describedby="s-weight">
                            <div class="input-group-append">
                               <span class="input-group-text">lbs</span>
                            </div>
@@ -124,7 +124,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="s-reps" type="text" class="form-control" placeholder="Reps" value="{{ .SReps }}" aria-describedby="s-reps">
+                           <input id="s-reps" type="text" class="form-control" placeholder="Reps" value="{{if ne .SReps 0 }}{{ .SReps }}{{ end }}" aria-describedby="s-reps">
                            <div class="input-group-append">
                               <span class="input-group-text">Reps</span>
                            </div>
@@ -137,7 +137,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="bp-weight" type="text" class="form-control" placeholder="Weight" value="{{ .BPWeight }}" aria-describedby="bp-weight">
+                           <input id="bp-weight" type="text" class="form-control" placeholder="Weight" value="{{if ne .BPWeight 0 }}{{ .BPWeight }}{{ end }}" aria-describedby="bp-weight">
                            <div class="input-group-append">
                               <span class="input-group-text">lbs</span>
                            </div>
@@ -145,7 +145,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="bp-reps" type="text" class="form-control" placeholder="Reps" value="{{ .BPReps }}" aria-describedby="bp-reps">
+                           <input id="bp-reps" type="text" class="form-control" placeholder="Reps" value="{{if ne .BPReps 0 }}{{ .BPReps }}{{ end }}" aria-describedby="bp-reps">
                            <div class="input-group-append">
                               <span class="input-group-text">Reps</span>
                            </div>
@@ -158,7 +158,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="ohp-weight" type="text" class="form-control" placeholder="Weight" value="{{ .OHPWeight }}" aria-describedby="ohp-weight">
+                           <input id="ohp-weight" type="text" class="form-control" placeholder="Weight" value="{{if ne .OHPWeight 0 }}{{ .OHPWeight }}{{ end }}" aria-describedby="ohp-weight">
                            <div class="input-group-append">
                               <span class="input-group-text">lbs</span>
                            </div>
@@ -166,7 +166,7 @@
                      </div>
                      <div class="col-sm-4 col-md-3">
                         <div class="input-group">
-                           <input id="ohp-reps" type="text" class="form-control" placeholder="Reps" value="{{ .OHPReps }}" aria-describedby="ohp-reps">
+                           <input id="ohp-reps" type="text" class="form-control" placeholder="Reps" value="{{if ne .OHPReps 0 }}{{ .OHPReps }}{{ end }}" aria-describedby="ohp-reps">
                            <div class="input-group-append">
                               <span class="input-group-text">Reps</span>
                            </div>
