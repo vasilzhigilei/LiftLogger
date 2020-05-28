@@ -4,14 +4,15 @@ form.addEventListener('submit', submitForm);
 
 function submitForm(event){
     event.preventDefault()
-    data = getData()
-    if(data.length < 1)
+    fetcheddata = getData()
+    if(fetcheddata.length < 1)
         return // if no data, don't do anything
-    document.getElementById("results").innerHTML = buildHTML(data)
+    console.log(fetcheddata)
+    document.getElementById("results").innerHTML = buildHTML(fetcheddata)
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
         type: "GET",
-        data: this.data,
+        data: {liftdata: JSON.stringify(fetcheddata)},
         success: function (data) {
             console.log("lifts logged")
         },

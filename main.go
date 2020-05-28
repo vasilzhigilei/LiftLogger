@@ -167,11 +167,9 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 }
 
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
-	fmt.Println("hi")
 	for k, v := range r.URL.Query() {
 		fmt.Printf("%s: %s\n", k, v)
 	}
-
 }
 
 func generateStateOauthCookie(w http.ResponseWriter) string {
