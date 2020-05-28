@@ -80,6 +80,8 @@ func main(){
 
 	r.HandleFunc("/", indexHandler).Methods("GET")
 
+	r.HandleFunc("/loglifts", logliftsHandler).Methods("GET")
+
 	// file directory for file serving
 	staticFileDirectory := http.Dir("./static/")
 	// the prefix is the routing address, the address the user goes to
@@ -162,6 +164,14 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 	_, err = cache.Do("DEL", c.Value)
 	checkErr(err)
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+}
+
+func logliftsHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("hi")
+	for k, v := range r.URL.Query() {
+		fmt.Printf("%s: %s\n", k, v)
+	}
+
 }
 
 func generateStateOauthCookie(w http.ResponseWriter) string {

@@ -11,7 +11,7 @@ function submitForm(event){
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
         type: "GET",
-        data: data,
+        data: this.data,
         success: function (data) {
             console.log("lifts logged")
         },
