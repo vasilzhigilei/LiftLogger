@@ -142,7 +142,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		indexTemplate.Execute(w, data)
 		return
 	}else {
-		fmt.Println(fmt.Sprintf("%s", response))
+		fmt.Println(fmt.Sprintf("%s", response), "has loaded index.html")
 		data := db.GetUser(fmt.Sprintf("%s", response))
 		data.Username = fmt.Sprintf("%s", response)
 		data.Loginoutbtn = logoutbtnHTML

@@ -8,6 +8,17 @@ function submitForm(event){
     if(data.length < 1)
         return // if no data, don't do anything
     document.getElementById("results").innerHTML = buildHTML(data)
+    $.ajax({
+        url : $(form).attr('action') || window.location.pathname,
+        type: "GET",
+        data: data,
+        success: function (data) {
+            console.log("lifts logged")
+        },
+        error: function (jXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
 }
 
 function buildHTML(data){
