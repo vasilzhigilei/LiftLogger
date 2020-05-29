@@ -11,7 +11,8 @@ function submitForm(event){
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
-        type: "GET",
+        type: "POST",
+        contentType: "application/json",
         data: {liftdata: JSON.stringify(fetcheddata)},
         success: function (data) {
             console.log("lifts logged")
