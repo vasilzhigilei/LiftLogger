@@ -166,6 +166,9 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
+type IncomingArray struct {
+	incoming *IncomingData
+}
 type IncomingData struct {
 	name string
 	weight float32 // in order to support personal weight float
@@ -174,14 +177,8 @@ type IncomingData struct {
 
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
 	//alldata := []IncomingData{}
-	fmt.Println(r.FormValue("liftdata"))
-	for k, v := range r.URL.Query() {
-		fmt.Printf("%s: %s\n", k, v)
-		//data := IncomingData{}
-		//json.Unmarshal(, &data)
-		//alldata = append(alldata, data)
-	}
-	//fmt.Println(alldata)
+	r.ParseForm()
+	fmt.Println(r.Form, r.FormValue("lifts[0][weight]"), len(r.Form))
 }
 
 func generateStateOauthCookie(w http.ResponseWriter) string {

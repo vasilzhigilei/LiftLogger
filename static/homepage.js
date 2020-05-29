@@ -5,15 +5,14 @@ form.addEventListener('submit', submitForm);
 function submitForm(event){
     event.preventDefault()
     fetcheddata = getData()
-    if(fetcheddata.length < 1)
+    if(fetcheddata["lifts"].length < 1)
         return // if no data, don't do anything
     console.log(fetcheddata)
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
         type: "POST",
-        contentType: "application/json",
-        data: {liftdata: JSON.stringify(fetcheddata)},
+        data: fetcheddata,
         success: function (data) {
             console.log("lifts logged")
         },
@@ -26,13 +25,13 @@ function submitForm(event){
 function buildHTML(data){
     htmlstring = "<br><div class=\"row\"><div class=\"col-md-12 bg-light padding rounded\">" +
             "<p class=\"h3\">Estimated 1 Rep Maxes</p><hr/>"
-    for(i = 0; i < data.length; ++i){
-        datum = data[i]
-        if(datum[0] == "Personal")
+    for(i = 0; i < data["lifts"].length; ++i){
+        datum = data["lifts"][i]
+        if(datum["name"] == "Personal")
             continue
-        max = Math.round(generate1RM(datum[1], datum[2]))
+        max = Math.round(generate1RM(datum["weight"], datum["reps"]))
         rowhtml = `<div class=\"row mb-3\">` +
-            `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum[0]}</p></div>` +
+            `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum["name"]}</p></div>` +
             `<div class=\"col-sm-4 col-md-3\"><p class="h5">${max}lbs</p></div>` +
             `</div>`
         htmlstring += rowhtml
@@ -44,11 +43,11 @@ function buildHTML(data){
 function getData() {
     // returns array of sets of lifts and weights/reps
     inputblocks = document.querySelectorAll(".inputblock")
-    data = []
+    data = {"lifts":[]}
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
         if(result.length > 0) {
-            data.push([inputblocks[i].id, result[0], result[1]])
+            data["lifts"].push({"name":inputblocks[i].id, "weight":result[0], "reps":result[1]})
         }
     }
     return data
