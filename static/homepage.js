@@ -7,8 +7,8 @@ function submitForm(event){
     fetcheddata = getData()
     if(fetcheddata["lifts"].length < 1)
         return // if no data, don't do anything
-    console.log(fetcheddata)
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
+    fetcheddata["date"] = Date.now()
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
         type: "POST",
