@@ -167,10 +167,18 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 }
 
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
-	//alldata := []IncomingData{}
-	r.ParseForm()
-	for i := 0; i <= (len(r.Form) - 1)/3; i++ {
-		fmt.Println(r.FormValue(fmt.Sprintf("lifts[%d][name]", i)))
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	response, err := cache.Do("GET", c.Value)
+	checkErr(err)
+	if response != nil {
+		err = db.LogLifts(fmt.Sprintf("#{response}"), fmt.Sprintf("%+v", r.Form))
+		r.ParseForm()
+		for i := 0; i <= (len(r.Form)-1)/3; i++ {
+			fmt.Println(r.FormValue(fmt.Sprintf("lifts[%d][name]", i)))
+		}
+		fmt.Println(r.Form)
+		checkErr(err)
 	}
 }
 

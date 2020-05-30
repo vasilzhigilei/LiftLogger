@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx"
-	"time"
 )
 
 /**
@@ -34,21 +33,9 @@ func (d *Database) InsertUser(email string) error {
 	return err
 }
 
-type LiftData struct {
-	email string
-	day time.Time
-	logs map[string]float32 // allow floats, but lifting data will be stored as ints (weight will be float)
-}
-
-func (d *Database) LogLifts(ld LiftData) error {
-	// construct json to append to json[] in the database
-	liftstr := fmt.Sprintf("{\"day\": %s", ld.day.String())
-	for key, value := range ld.logs {
-		liftstr += fmt.Sprintf(", \"%s\": %f", key, value)
-	}
-	liftstr += "}"
-	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET lifts = lifts || " + liftstr +
-		" WHERE email IS " + ld.email)
+func (d *Database) LogLifts(email string, data string) error {
+	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET lifts = lifts || " + data +
+		" WHERE email IS " + email)
 	return err
 }
 

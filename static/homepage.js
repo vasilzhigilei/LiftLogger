@@ -1,6 +1,7 @@
 
 var form = document.getElementById("analyzeform")
 form.addEventListener('submit', submitForm);
+var clicked;
 
 function submitForm(event){
     event.preventDefault()
@@ -8,11 +9,10 @@ function submitForm(event){
     if(fetcheddata["lifts"].length < 1)
         return // if no data, don't do anything
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
-    fetcheddata["date"] = Date.now()
     $.ajax({
         url : $(form).attr('action') || window.location.pathname,
         type: "POST",
-        data: fetcheddata,
+        data: form.,
         success: function (data) {
             console.log("lifts logged")
         },
