@@ -59,18 +59,6 @@ func main(){
 	// Connect to database
 	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
 
-	// test insert new user
-	//err = db.InsertUser("example@example.com")
-	checkErr(err)
-
-	//db.PrintAllUsers()
-	/*lifts := LiftData{
-		email: "diamondmine360@gmail.com",
-		day:   time.Now(),
-		logs:  {"dl_weight": 250, "dl_reps":5}.
-	}*/
-	//db.LogLifts()
-
 	// Declare a new router
 	r := mux.NewRouter()
 
@@ -166,6 +154,17 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
+type User struct {
+	Email string
+	Sex bool
+	Age int
+	Weight float32
+	Deadlift int
+	Squat int
+	Bench int
+	Overhead int
+}
+
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
 	c, err := r.Cookie("oauthstate")
 	checkErr(err)
@@ -177,7 +176,6 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 		for i := 0; i <= (len(r.Form)-1)/3; i++ {
 			fmt.Println(r.FormValue(fmt.Sprintf("lifts[%d][name]", i)))
 		}
-		fmt.Println(r.Form)
 		checkErr(err)
 	}
 }

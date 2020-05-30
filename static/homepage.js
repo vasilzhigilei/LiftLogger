@@ -9,17 +9,19 @@ function submitForm(event){
     if(fetcheddata["lifts"].length < 1)
         return // if no data, don't do anything
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
-    $.ajax({
-        url : $(form).attr('action') || window.location.pathname,
-        type: "POST",
-        data: form.,
-        success: function (data) {
-            console.log("lifts logged")
-        },
-        error: function (jXHR, textStatus, errorThrown) {
-            alert(errorThrown);
-        }
-    });
+    if(clicked == "log") {
+        $.ajax({
+            url: $(form).attr('action') || window.location.pathname,
+            type: "POST",
+            data: fetcheddata,
+            success: function (data) {
+                console.log("lifts logged")
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
 }
 
 function buildHTML(data){
