@@ -174,9 +174,9 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 	if response != nil {
 		//err = db.LogLifts(fmt.Sprintf("#{response}"), fmt.Sprintf("%+v", r.Form))
 		r.ParseForm()
-		//fmt.Println(r.Form)
+		fmt.Println(r.Form)
 		user := User{
-			Email:    fmt.Sprintf("#{response}"),
+			Email:    fmt.Sprintf("%s", response),
 			Sex:      false,
 			Age:      myatoi(r.FormValue("Age")),
 			Weight:   myparsefloat(r.FormValue("Weight")),

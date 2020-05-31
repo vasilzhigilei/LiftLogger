@@ -44,10 +44,12 @@ function getData() {
     data = {}
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
-        if(inputblocks[i].id == "Personal"){
+        if(inputblocks[i].id === "Personal") {
+            console.log(result[1])
+            data["Weight"] = result[0]
             data["Age"] = result[1]
         }else {
-            if (result.length > 0) {
+            if (result.length > 1) {
                 data[inputblocks[i].id] = Math.round(generate1RM(result[0], result[1]))
             } else {
                 data[inputblocks[i].id] = 0
@@ -64,7 +66,7 @@ function getFields(inputblock){
     for(i = 0; i < fields.length; ++i){
         field = fields[i]
         if(isNaN(field.value) || field.value == ""){
-            return []
+            result.push(0)
         } else {
             result.push(parseFloat(field.value))
         }
