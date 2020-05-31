@@ -172,9 +172,8 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 	response, err := cache.Do("GET", c.Value)
 	checkErr(err)
 	if response != nil {
-		//err = db.LogLifts(fmt.Sprintf("#{response}"), fmt.Sprintf("%+v", r.Form))
 		r.ParseForm()
-		fmt.Println(r.Form)
+		//fmt.Println(r.Form)
 		user := User{
 			Email:    fmt.Sprintf("%s", response),
 			Sex:      false,
@@ -185,7 +184,9 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 			Bench:    myatoi(r.FormValue("Bench Press")),
 			Overhead: myatoi(r.FormValue("Overhead Press")),
 		}
-		fmt.Println(user)
+		//fmt.Println(user)
+		err = db.LogLifts(&user)
+		checkErr(err)
 	}
 }
 

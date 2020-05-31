@@ -34,14 +34,15 @@ func (d *Database) InsertUser(email string) error {
 }
 
 func (d *Database) LogLifts(user *User) error {
-	execstring := "UPDATE userdata SET age = " + fmt.Sprintf("%b", user.Age) +
+	fmt.Println(time.Now().String())
+	execstring := "UPDATE userdata SET age = " + fmt.Sprintf("%b", user.Age) + ", " +
 		"weight = weight || " + fmt.Sprintf("%f", user.Weight) + ", " +
 		"deadlift = deadlift || " + fmt.Sprintf("%b", user.Deadlift) + ", " +
 		"squat = squat || " + fmt.Sprintf("%b", user.Squat) + ", " +
 		"bench = bench || " + fmt.Sprintf("%b", user.Bench) + ", " +
 		"overhead = overhead || " + fmt.Sprintf("%b", user.Overhead) + ", " +
-		"time = time || " + time.Now().String() +
-		" WHERE email IS " + user.Email
+		"time = time || '" + time.Now().String() + "' " +
+		"WHERE email = '" + user.Email + "';"
 	_, err := d.conn.Exec(context.Background(), execstring)
 	return err
 }
