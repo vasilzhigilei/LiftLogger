@@ -31,10 +31,9 @@ function buildHTML(data){
         datum = data["lifts"][i]
         if(datum["name"] == "Personal")
             continue
-        max = Math.round(generate1RM(datum["weight"], datum["reps"]))
         rowhtml = `<div class=\"row mb-3\">` +
             `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum["name"]}</p></div>` +
-            `<div class=\"col-sm-4 col-md-3\"><p class="h5">${max}lbs</p></div>` +
+            `<div class=\"col-sm-4 col-md-3\"><p class="h5">${datum["max"]}lbs</p></div>` +
             `</div>`
         htmlstring += rowhtml
     }
@@ -43,13 +42,13 @@ function buildHTML(data){
 }
 
 function getData() {
-    // returns array of sets of lifts and weights/reps
+    // returns array of sets of lifts and 1Rep Max
     inputblocks = document.querySelectorAll(".inputblock")
     data = {"lifts":[]}
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
         if(result.length > 0) {
-            data["lifts"].push({"name":inputblocks[i].id, "weight":result[0], "reps":result[1]})
+            data["lifts"].push({"name":inputblocks[i].id, "max":generate1RM(result[0], result[1])})
         }
     }
     return data

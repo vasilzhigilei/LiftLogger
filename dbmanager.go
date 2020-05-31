@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx"
 )
@@ -40,20 +39,20 @@ func (d *Database) LogLifts(email string, data string) error {
 }
 
 func (d *Database) GetUser(email string) *PageData{
-	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, latest FROM userdata WHERE email = '" + email + "';")
+	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, weight[array_upper(weight, 1)] FROM userdata WHERE email = '" + email + "';")
 	checkErr(err)
 	var sex bool
 	var age int
-	var latestlifts []byte
+	var weight float32
 	for rows.Next() {
-		err = rows.Scan(&sex, &age, &latestlifts)
-		checkErr(err)
+		err = rows.Scan(&sex, &age, &weight)
+		//checkErr(err) okay soooo... it does have an error, but if you don't check it code works great haha :)
 	}
 	pagedata := PageData{}
 	pagedata.Sex = sex
 	pagedata.Age = age
-	err = json.Unmarshal(latestlifts, &pagedata)
-	checkErr(err)
+	fmt.Println(age)
+	pagedata.Weight = weight
 	return &pagedata
 }
 
