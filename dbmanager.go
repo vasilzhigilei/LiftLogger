@@ -35,15 +35,16 @@ func (d *Database) InsertUser(email string) error {
 
 func (d *Database) LogLifts(user *User) error {
 	fmt.Println(time.Now().String())
-	execstring := "UPDATE userdata SET age = " + fmt.Sprintf("%b", user.Age) + ", " +
-		"weight = weight || " + fmt.Sprintf("%f", user.Weight) + ", " +
-		"deadlift = deadlift || " + fmt.Sprintf("%b", user.Deadlift) + ", " +
-		"squat = squat || " + fmt.Sprintf("%b", user.Squat) + ", " +
-		"bench = bench || " + fmt.Sprintf("%b", user.Bench) + ", " +
-		"overhead = overhead || " + fmt.Sprintf("%b", user.Overhead) + ", " +
-		"time = time || '" + time.Now().String() + "' " +
-		"WHERE email = '" + user.Email + "';"
-	_, err := d.conn.Exec(context.Background(), execstring)
+	execstring := `UPDATE userdata SET age = $1,
+		weight = array_append(weight, $2),
+		deadlift = array_append(deadlift, $3),
+		squat = array_append(squat, $4),
+		bench = array_append(bench, $5),
+		overhead = array_append(overhead, $6),
+		time = array_append(time, $7)
+		WHERE email = $8;`
+	_, err := d.conn.Exec(context.Background(), execstring, user.Age, user.Weight, user.Deadlift, user.Squat,
+		user.Bench, user.Overhead, time.Now(), user.Email)
 	return err
 }
 

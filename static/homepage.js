@@ -66,7 +66,7 @@ function getFields(inputblock){
     for(i = 0; i < fields.length; ++i){
         field = fields[i]
         if(isNaN(field.value) || field.value == ""){
-            result.push(0)
+            result.push(0.0)
         } else {
             result.push(parseFloat(field.value))
         }
