@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -97,7 +98,7 @@ type PageData struct {
 	Loginoutbtn template.HTML
 	Sex bool
 	Age int
-	Weight float32
+	Weight float64
 	DLWeight int
 	DLReps int
 	SWeight int
@@ -158,7 +159,7 @@ type User struct {
 	Email string
 	Sex bool
 	Age int
-	Weight float32
+	Weight float64
 	Deadlift int
 	Squat int
 	Bench int
@@ -173,11 +174,29 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 	if response != nil {
 		//err = db.LogLifts(fmt.Sprintf("#{response}"), fmt.Sprintf("%+v", r.Form))
 		r.ParseForm()
-		for i := 0; i <= (len(r.Form)-1)/3; i++ {
-			fmt.Println(r.FormValue(fmt.Sprintf("lifts[%d][name]", i)))
+		//fmt.Println(r.Form)
+		user := User{
+			Email:    fmt.Sprintf("#{response}"),
+			Sex:      false,
+			Age:      myatoi(r.FormValue("Age")),
+			Weight:   myparsefloat(r.FormValue("Weight")),
+			Deadlift: myatoi(r.FormValue("Deadlift")),
+			Squat:    myatoi(r.FormValue("Squat")),
+			Bench:    myatoi(r.FormValue("Bench Press")),
+			Overhead: myatoi(r.FormValue("Overhead Press")),
 		}
-		checkErr(err)
+		fmt.Println(user)
 	}
+}
+
+func myatoi(str string) int {
+	result, _ := strconv.Atoi(str)
+	return result
+}
+
+func myparsefloat(str string) float64 {
+	result, _ := strconv.ParseFloat(str, 64)
+	return result
 }
 
 func generateStateOauthCookie(w http.ResponseWriter) string {

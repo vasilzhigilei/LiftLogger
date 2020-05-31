@@ -6,8 +6,6 @@ var clicked;
 function submitForm(event){
     event.preventDefault()
     fetcheddata = getData()
-    if(fetcheddata["lifts"].length < 1)
-        return // if no data, don't do anything
     document.getElementById("results").innerHTML = buildHTML(fetcheddata)
     if(clicked == "log") {
         $.ajax({
@@ -27,13 +25,12 @@ function submitForm(event){
 function buildHTML(data){
     htmlstring = "<br><div class=\"row\"><div class=\"col-md-12 bg-light padding rounded\">" +
             "<p class=\"h3\">Estimated 1 Rep Maxes</p><hr/>"
-    for(i = 0; i < data["lifts"].length; ++i){
-        datum = data["lifts"][i]
-        if(datum["name"] == "Personal")
+    for (var key in data){
+        if(key == "Weight" || key == "Age")
             continue
         rowhtml = `<div class=\"row mb-3\">` +
-            `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${datum["name"]}</p></div>` +
-            `<div class=\"col-sm-4 col-md-3\"><p class="h5">${datum["max"]}lbs</p></div>` +
+            `<div class=\"col-sm-4 col-md-2\"><p class=\"h5 textright\">${key}</p></div>` +
+            `<div class=\"col-sm-4 col-md-3\"><p class="h5">${data[key]}lbs</p></div>` +
             `</div>`
         htmlstring += rowhtml
     }
@@ -44,11 +41,17 @@ function buildHTML(data){
 function getData() {
     // returns array of sets of lifts and 1Rep Max
     inputblocks = document.querySelectorAll(".inputblock")
-    data = {"lifts":[]}
+    data = {}
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
-        if(result.length > 0) {
-            data["lifts"].push({"name":inputblocks[i].id, "max":generate1RM(result[0], result[1])})
+        if(inputblocks[i].id == "Personal"){
+            data["Age"] = result[1]
+        }else {
+            if (result.length > 0) {
+                data[inputblocks[i].id] = Math.round(generate1RM(result[0], result[1]))
+            } else {
+                data[inputblocks[i].id] = 0
+            }
         }
     }
     return data

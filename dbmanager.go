@@ -54,7 +54,7 @@ func (d *Database) GetUser(email string) *PageData{
 	checkErr(err)
 	var sex bool
 	var age int
-	var weight float32
+	var weight float64
 	var deadlift int
 	var squat int
 	var bench int
