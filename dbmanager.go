@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx"
+	"time"
 )
 
 /**
@@ -32,15 +33,22 @@ func (d *Database) InsertUser(email string) error {
 	return err
 }
 
-func (d *Database) LogLifts(email string, data string) error {
-	_, err := d.conn.Exec(context.Background(), "UPDATE userdata SET lifts = lifts || " + data +
-		" WHERE email IS " + email)
+func (d *Database) LogLifts(user *User) error {
+	execstring := "UPDATE userdata SET age = " + fmt.Sprintf("%b", user.Age) +
+		"weight = weight || " + fmt.Sprintf("%f", user.Weight) + ", " +
+		"deadlift = deadlift || " + fmt.Sprintf("%b", user.Deadlift) + ", " +
+		"squat = squat || " + fmt.Sprintf("%b", user.Squat) + ", " +
+		"bench = bench || " + fmt.Sprintf("%b", user.Bench) + ", " +
+		"overhead = overhead || " + fmt.Sprintf("%b", user.Overhead) + ", " +
+		"time = time || " + time.Now().String() +
+		" WHERE email IS " + user.Email
+	_, err := d.conn.Exec(context.Background(), execstring)
 	return err
 }
 
 func (d *Database) GetUser(email string) *PageData{
 	querystring := "SELECT sex, age, weight[array_upper(weight, 1)], deadlift[array_upper(deadlift, 1)], " +
-		"squat[array_upper(squat, 1)], bench[array_upper(bench, 1)], overhead[array_upper(overhead, 1)], " +
+		"squat[array_upper(squat, 1)], bench[array_upper(bench, 1)], overhead[array_upper(overhead, 1)] " +
 		"FROM userdata WHERE email = '" + email + "';"
 	rows, err := d.conn.Query(context.Background(), querystring)
 	checkErr(err)
@@ -54,6 +62,7 @@ func (d *Database) GetUser(email string) *PageData{
 	for rows.Next() {
 		err = rows.Scan(&sex, &age, &weight, &deadlift, &squat, &bench, &overhead)
 		//checkErr(err) okay soooo... it does have an error, but if you don't check it code works great haha :)
+		// reason for err is if there is an empty array (all users who haven't logged a certain lift)
 	}
 	pagedata := PageData{
 		DLReps: 1,
@@ -64,7 +73,10 @@ func (d *Database) GetUser(email string) *PageData{
 	pagedata.Sex = sex
 	pagedata.Age = age
 	pagedata.Weight = weight
-	pagedata.d
+	pagedata.DLWeight = deadlift
+	pagedata.SWeight = squat
+	pagedata.BPWeight = bench
+	pagedata.OHPWeight = overhead
 	return &pagedata
 }
 
