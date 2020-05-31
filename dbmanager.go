@@ -39,20 +39,32 @@ func (d *Database) LogLifts(email string, data string) error {
 }
 
 func (d *Database) GetUser(email string) *PageData{
-	rows, err := d.conn.Query(context.Background(), "SELECT sex, age, weight[array_upper(weight, 1)] FROM userdata WHERE email = '" + email + "';")
+	querystring := "SELECT sex, age, weight[array_upper(weight, 1)], deadlift[array_upper(deadlift, 1)], " +
+		"squat[array_upper(squat, 1)], bench[array_upper(bench, 1)], overhead[array_upper(overhead, 1)], " +
+		"FROM userdata WHERE email = '" + email + "';"
+	rows, err := d.conn.Query(context.Background(), querystring)
 	checkErr(err)
 	var sex bool
 	var age int
 	var weight float32
+	var deadlift int
+	var squat int
+	var bench int
+	var overhead int
 	for rows.Next() {
-		err = rows.Scan(&sex, &age, &weight)
+		err = rows.Scan(&sex, &age, &weight, &deadlift, &squat, &bench, &overhead)
 		//checkErr(err) okay soooo... it does have an error, but if you don't check it code works great haha :)
 	}
-	pagedata := PageData{}
+	pagedata := PageData{
+		DLReps: 1,
+		SReps: 1,
+		BPReps: 1,
+		OHPReps: 1,
+	}
 	pagedata.Sex = sex
 	pagedata.Age = age
-	fmt.Println(age)
 	pagedata.Weight = weight
+	pagedata.d
 	return &pagedata
 }
 
