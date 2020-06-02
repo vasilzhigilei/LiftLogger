@@ -36,27 +36,14 @@ func (d *Database) InsertUser(email string) error {
 func (d *Database) LogLifts(user *User) error {
 	fmt.Println(time.Now().Date())
 	execstring := `
-SELECT date[array_upper(date, 1)]
-CASE
-WHEN date[array_upper(date,1)] = $7 THEN
-UPDATE userdata SET age = $1,
-weight[array_upper(weight, 1)] = $2,
-deadlift[array_upper(deadlift, 1)] = $3,
-squat[array_upper(squat, 1)] = $4,
-bench[array_upper(bench, 1)] = $5,
-overhead[array_upper(overhead, 1)] = $6,
-WHERE email = $8
-ELSE
-UPDATE userdata SET age = $1,
-weight = array_append(weight, $2),
-deadlift = array_append(deadlift, $3),
-squat = array_append(squat, $4),
-bench = array_append(bench, $5),
-overhead = array_append(overhead, $6),
-date = array_append(date, $7)
-WHERE email = $8
-END
-FROM userdata WHERE email = $8`
+UPDATE userdata
+SET age = $1,
+weight = CASE WHEN date[array_upper(date,1)] = $7 THEN weight[array_upper(weight, 1)] = $2 ELSE weight = array_append(weight, $2) END,
+deadlift = CASE WHEN date[array_upper(date,1)] = $7 THEN deadlift[array_upper(deadlift, 1)] = $2 ELSE deadlift = array_append(deadlift, $3) END,
+squat = CASE WHEN date[array_upper(date,1)] = $7 THEN squat[array_upper(squat, 1)] = $2 ELSE squat = array_append(squat, $4) END,
+bench = CASE WHEN date[array_upper(date,1)] = $7 THEN bench[array_upper(bench, 1)] = $2 ELSE bench = array_append(bench, $5) END,
+overhead = CASE WHEN date[array_upper(date,1)] = $7 THEN overhead[array_upper(overhead, 1)] = $2 ELSE overhead = array_append(overhead, $6) END,
+WHERE email = $8`
 	_, err := d.conn.Exec(context.Background(), execstring, user.Age, user.Weight, user.Deadlift, user.Squat,
 		user.Bench, user.Overhead, fmt.Sprint(time.Now().Date()), user.Email)
 	return err
