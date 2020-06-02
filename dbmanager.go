@@ -55,7 +55,7 @@ WHERE email = $8;`
 	return err
 }
 
-func (d *Database) GetUser(email string) *PageData{
+func (d *Database) GetUserLatest(email string) *PageData{
 	querystring := "SELECT sex, age, weight[array_upper(weight, 1)], deadlift[array_upper(deadlift, 1)], " +
 		"squat[array_upper(squat, 1)], bench[array_upper(bench, 1)], overhead[array_upper(overhead, 1)] " +
 		"FROM userdata WHERE email = '" + email + "';"
