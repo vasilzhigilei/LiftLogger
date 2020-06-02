@@ -34,7 +34,6 @@ func (d *Database) InsertUser(email string) error {
 }
 
 func (d *Database) LogLifts(user *User) error {
-	fmt.Println(time.Now().Date())
 	execstring := `
 UPDATE userdata
 SET age = $1,
