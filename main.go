@@ -202,7 +202,10 @@ func getliftsHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := cache.Do("GET", c.Value)
 	checkErr(err)
 	if response != nil {
-
+		user := db.GetUserAll(fmt.Sprintf("%s", response))
+		b, err := json.Marshal(user)
+		checkErr(err)
+		w.Write(b)
 	}
 }
 

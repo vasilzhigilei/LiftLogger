@@ -88,8 +88,19 @@ func (d *Database) GetUserLatest(email string) *PageData{
 	return &pagedata
 }
 
-func (d *Database) GetUserAll(){
-	
+func (d *Database) GetUserAll(email string) *User{
+	querystring := "SELECT sex, age, weight, deadlift, squat, bench, overhead " +
+		"FROM userdata WHERE email = '" + email + "';"
+	rows, err := d.conn.Query(context.Background(), querystring)
+	checkErr(err)
+	user := User{
+		Email:    email,
+	}
+	for rows.Next() {
+		rows.Scan(&user.Sex, &user.Age, &user.Weight, &user.Deadlift, &user.Squat, &user.Bench,
+			&user.Overhead, &user.Date)
+	}
+	return &user
 }
 
 func (d *Database) SelectAllUsers() pgx.Rows{
