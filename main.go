@@ -163,11 +163,12 @@ type User struct {
 	Email string
 	Sex bool
 	Age int
-	Weight float64
-	Deadlift int
-	Squat int
-	Bench int
-	Overhead int
+	Weight []float64
+	Deadlift []int
+	Squat []int
+	Bench []int
+	Overhead []int
+	Date []string
 }
 
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
@@ -182,15 +183,26 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 			Email:    fmt.Sprintf("%s", response),
 			Sex:      false,
 			Age:      myatoi(r.FormValue("Age")),
-			Weight:   myparsefloat(r.FormValue("Weight")),
-			Deadlift: myatoi(r.FormValue("Deadlift")),
-			Squat:    myatoi(r.FormValue("Squat")),
-			Bench:    myatoi(r.FormValue("Bench Press")),
-			Overhead: myatoi(r.FormValue("Overhead Press")),
+			Weight:   []float64{myparsefloat(r.FormValue("Weight"))},
+			Deadlift: []int{myatoi(r.FormValue("Deadlift"))},
+			Squat:    []int{myatoi(r.FormValue("Squat"))},
+			Bench:    []int{myatoi(r.FormValue("Bench Press"))},
+			Overhead: []int{myatoi(r.FormValue("Overhead Press"))},
+			Date:     []string{fmt.Sprint(time.Now().Date())},
 		}
 		//fmt.Println(user)
 		err = db.LogLifts(&user)
 		checkErr(err)
+	}
+}
+
+func getliftsHandler(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	response, err := cache.Do("GET", c.Value)
+	checkErr(err)
+	if response != nil {
+
 	}
 }
 

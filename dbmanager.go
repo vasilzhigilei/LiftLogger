@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx"
-	"time"
 )
 
 /**
@@ -50,8 +49,8 @@ ELSE array_append(overhead, $6) END,
 date = CASE WHEN date[array_upper(date,1)] = $7 THEN array_replace(date, date[array_upper(date, 1)], $7) 
 ELSE array_append(date, $7) END
 WHERE email = $8;`
-	_, err := d.conn.Exec(context.Background(), execstring, user.Age, user.Weight, user.Deadlift, user.Squat,
-		user.Bench, user.Overhead, fmt.Sprint(time.Now().Date()), user.Email)
+	_, err := d.conn.Exec(context.Background(), execstring, user.Age, user.Weight[0], user.Deadlift[0], user.Squat[0],
+		user.Bench[0], user.Overhead[0], user.Date[0], user.Email)
 	return err
 }
 
@@ -89,7 +88,9 @@ func (d *Database) GetUserLatest(email string) *PageData{
 	return &pagedata
 }
 
-func (d *Database) GetUserAll()
+func (d *Database) GetUserAll(){
+	
+}
 
 func (d *Database) SelectAllUsers() pgx.Rows{
 	rows, _ := d.conn.Query(context.Background(), "SELECT email, sex, weight, age FROM userdata")
