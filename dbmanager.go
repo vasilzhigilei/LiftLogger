@@ -89,6 +89,8 @@ func (d *Database) GetUserLatest(email string) *PageData{
 	return &pagedata
 }
 
+func (d *Database) GetUserAll()
+
 func (d *Database) SelectAllUsers() pgx.Rows{
 	rows, _ := d.conn.Query(context.Background(), "SELECT email, sex, weight, age FROM userdata")
 	return rows

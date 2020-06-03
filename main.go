@@ -63,13 +63,17 @@ func main(){
 	// Declare a new router
 	r := mux.NewRouter()
 
+	// Login/logout management
 	r.HandleFunc("/login", loginHandler).Methods("GET")
 	r.HandleFunc("/callback", callbackHandler).Methods("GET")
 	r.HandleFunc("/logout", logoutHandler).Methods("GET")
 
+	// Main page
 	r.HandleFunc("/", indexHandler).Methods("GET")
 
+	// API AJAX calls to log lifts or fetch lifting history
 	r.HandleFunc("/loglifts", logliftsHandler).Methods("POST")
+	r.HandleFunc("/getlifts", getliftsHandler).Methods("POST")
 
 	// file directory for file serving
 	staticFileDirectory := http.Dir("./static/")

@@ -1,4 +1,6 @@
-var ctx = document.getElementById('myChart').getContext('2d');
+var chart = document.getElementById('myChart');
+var ctx = chart.getContext('2d');
+chart.height = 70;
 var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
@@ -7,11 +9,17 @@ var chart = new Chart(ctx, {
     data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45]
-        }]
+                label: 'Weight',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: [0, 10, 5, 2, 20, 30, 45]
+            },
+            {
+                label: 'Deadlift',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderColor: 'rgb(99, 206, 255)',
+                data: [45, 5, 10, 2, 30, 20, 10]
+            }]
     },
 
     // Configuration options go here
