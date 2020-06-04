@@ -59,14 +59,27 @@ $.ajax({
 
 document.getElementById("repsdisplay").onchange = function () {
     updateReps(this.value)
+    date = new Date(Date.now() + 365*24*60*60*1000)
+    document.cookie = "repspreference=" + this.value + "; expires=" +
+        date + "; path=/"
 }
 function updateReps(reps) {
+    inputblocks = document.querySelectorAll(".inputblock")
+    for(var i = 0; i < inputblocks.length; i++){
+        if(inputblocks[i].id != "Personal") {
+            fields = inputblocks[i].getElementsByClassName("form-control")
+            arr = jsondata[inputblocks[i].id]
+            console.log(inputblocks[i].id)
+            fields[0].value = Math.round(generateXRM(arr[arr.length - 1], reps))
+            fields[1].value = reps
+        }
+    }
     chart.data.datasets.forEach((dataset) => {
         if(dataset.label == "Weight"){
             return
         }
         for(i = 0; i < dataset.data.length; i++){
-            dataset.data[i] = generateXRM(jsondata[dataset.label][i], reps)
+            dataset.data[i] = Math.round(generateXRM(jsondata[dataset.label][i], reps))
         }
     });
     chart.update();

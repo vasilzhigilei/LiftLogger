@@ -186,8 +186,8 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 			Weight:   []float64{myparsefloat(r.FormValue("Weight"))},
 			Deadlift: []int{myatoi(r.FormValue("Deadlift"))},
 			Squat:    []int{myatoi(r.FormValue("Squat"))},
-			Bench:    []int{myatoi(r.FormValue("Bench Press"))},
-			Overhead: []int{myatoi(r.FormValue("Overhead Press"))},
+			Bench:    []int{myatoi(r.FormValue("Bench"))},
+			Overhead: []int{myatoi(r.FormValue("Overhead"))},
 			Date:     []string{fmt.Sprint(time.Now().Date())},
 		}
 		//fmt.Println(user)
