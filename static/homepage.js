@@ -1,4 +1,3 @@
-
 var form = document.getElementById("analyzeform")
 form.addEventListener('submit', submitForm);
 var clicked;
@@ -92,7 +91,7 @@ function setInputFilter(textbox, inputFilter) {
     });
 }
 
-idsInt = ["dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
+idsInt = ["repsdisplay", "dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
 
 // limit lift weights/reps from 0 to 1200
 for(i = 0; i < idsInt.length; ++i) {
