@@ -2,10 +2,6 @@ var form = document.getElementById("analyzeform")
 form.addEventListener('submit', submitForm);
 var clicked;
 
-var reppref = document.getElementById("repsdisplay")
-reppref.value = document.cookie("repspreference").value
-document.cookie
-
 function submitForm(event){
     event.preventDefault()
     fetcheddata = getData()
