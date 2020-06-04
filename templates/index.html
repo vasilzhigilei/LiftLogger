@@ -52,7 +52,7 @@
                   <div class="input-group-prepend">
                      <div class="input-group-text">Display as</div>
                   </div>
-                  <input id="repsdisplay" type="text" class="form-control" placeholder="Reps" value="1" aria-describedby="reps">
+                  <input id="repsdisplay" type="number" class="form-control" placeholder="Reps" value="1" aria-describedby="reps">
                   <div class="input-group-append">
                      <span class="input-group-text">Rep(s)</span>
                </div>
@@ -198,5 +198,11 @@
       <script src="../static/homepage.js"></script>
       <script src="../static/generate.js"></script>
       <script src="../static/chartscript.js"></script>
+
+      <!-- input spinner JS -->
+      <script src="./src/bootstrap-input-spinner.js"></script>
+      <script>
+         $("input[type='number']").inputSpinner()
+      </script>
    </body>
 </html>

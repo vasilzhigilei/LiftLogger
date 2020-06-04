@@ -1,12 +1,13 @@
-var chart = document.getElementById('myChart');
-var ctx = chart.getContext('2d');
-chart.height = 70;
+var chartElement = document.getElementById('myChart');
+var ctx = chartElement.getContext('2d');
+chartElement.height = 70;
+var chart;
 $.ajax({
     url: "/getlifts" || window.location.pathname,
     type: "POST",
     success: function (data) {
         jsondata = JSON.parse(data)
-        var chart = new Chart(ctx, {
+        chart = new Chart(ctx, {
             // The type of chart we want to create
             type: 'line',
 
@@ -54,3 +55,18 @@ $.ajax({
         alert(errorThrown);
     }
 });
+
+document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(() => {  updateReps(20); }, 2000);
+});
+function updateReps(reps) {
+    chart.data.datasets.forEach((dataset) => {
+        if(dataset.label == "Weight"){
+            return
+        }
+        for(i = 0; i < dataset.data.length; i++){
+            dataset.data[i] = generateXRM(dataset.data[i], reps)
+        }
+    });
+    chart.update();
+}
