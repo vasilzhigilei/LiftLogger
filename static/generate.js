@@ -8,3 +8,12 @@
 function generate1RM(pounds, reps) {
     return (100 * pounds) / (48.8 + 53.8 * Math.E**(-0.075 * reps))
 }
+
+/**
+ * Generates X rep max given a 1 rep max
+ * @param pounds - weight lifted for 1 rep max
+ * @param reps - reps to convert the aforementioned pounds to
+ */
+function generateXRM(pounds, reps) {
+
+}
