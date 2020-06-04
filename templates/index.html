@@ -48,14 +48,9 @@
       <div class="navbar navbar-expand-md bg-light">
          <div class="container">
             <p class="h1 navbar-brand nomargin">{{ .Username }}</p>
-               <div class="input-group pull-right col-sm-6 col-md-4 col-lg-3">
-                  <div class="input-group-prepend">
-                     <div class="input-group-text">Display as</div>
-                  </div>
-                  <input id="repsdisplay" type="number" class="form-control" placeholder="Reps" value="1" aria-describedby="reps">
-                  <div class="input-group-append">
-                     <span class="input-group-text">Rep(s)</span>
-               </div>
+            <div class="input-group-sm pull-right col-sm-6 col-md-4 col-lg-3">
+               <input id="repsdisplay" type="number" class="form-control-sm" data-prefix="Use" data-suffix="Rep(s)"
+                      placeholder="Reps" value="1" min="1" max="1000" step="1" aria-describedby="reps">
             </div>
          </div>
       </div>
@@ -200,7 +195,7 @@
       <script src="../static/chartscript.js"></script>
 
       <!-- input spinner JS -->
-      <script src="./src/bootstrap-input-spinner.js"></script>
+      <script src="../static/bootstrap-input-spinner.js"></script>
       <script>
          $("input[type='number']").inputSpinner()
       </script>
