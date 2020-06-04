@@ -1,6 +1,5 @@
-var chartElement = document.getElementById('myChart');
+var chartElement = document.getElementById('mainchart');
 var ctx = chartElement.getContext('2d');
-chartElement.height = 70;
 var chart;
 $.ajax({
     url: "/getlifts" || window.location.pathname,
@@ -47,7 +46,7 @@ $.ajax({
             },
 
             // Configuration options go here
-            options: {}
+            options: {maintainAspectRatio: false,}
         });
         console.log("lifts fetched for chart")
     },
