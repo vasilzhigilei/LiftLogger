@@ -89,7 +89,7 @@ func (d *Database) GetUserLatest(email string) *PageData{
 }
 
 func (d *Database) GetUserAll(email string) *User{
-	querystring := "SELECT sex, age, weight, deadlift, squat, bench, overhead " +
+	querystring := "SELECT sex, age, weight, deadlift, squat, bench, overhead, date " +
 		"FROM userdata WHERE email = '" + email + "';"
 	rows, err := d.conn.Query(context.Background(), querystring)
 	checkErr(err)
@@ -97,8 +97,9 @@ func (d *Database) GetUserAll(email string) *User{
 		Email:    email,
 	}
 	for rows.Next() {
-		rows.Scan(&user.Sex, &user.Age, &user.Weight, &user.Deadlift, &user.Squat, &user.Bench,
+		err = rows.Scan(&user.Sex, &user.Age, &user.Weight, &user.Deadlift, &user.Squat, &user.Bench,
 			&user.Overhead, &user.Date)
+		checkErr(err)
 	}
 	return &user
 }
