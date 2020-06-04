@@ -70,10 +70,15 @@ func main(){
 
 	// Main page
 	r.HandleFunc("/", indexHandler).Methods("GET")
+	// About page
+	r.HandleFunc("/about", aboutHandler).Methods("GET")
 
 	// API AJAX calls to log lifts or fetch lifting history
 	r.HandleFunc("/loglifts", logliftsHandler).Methods("POST")
 	r.HandleFunc("/getlifts", getliftsHandler).Methods("POST")
+
+	// Get latest user data (more specifically, other users than oneself)
+	//r.HandleFunc("/user", userHandler).Methods("POST")
 
 	// file directory for file serving
 	staticFileDirectory := http.Dir("./static/")
@@ -208,6 +213,40 @@ func getliftsHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(b)
 	}
 }
+
+func aboutHandler(w http.ResponseWriter, r *http.Request){
+	data := PageData{
+		Username:    "Not Logged In",
+		Loginoutbtn: loginbtnHTML,
+	}
+	c, err := r.Cookie("oauthstate")
+	if err != nil {
+		// If the session token is not present in cache, set to not logged in
+		// For any other type of error, return a bad request status
+		if err == http.ErrNoCookie {
+			// If the cookie is not set, set to not logged in
+			aboutTemplate.Execute(w, data)
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	response, err := cache.Do("GET", c.Value)
+	checkErr(err)
+	if response == nil {
+		aboutTemplate.Execute(w, data)
+		return
+	}else {
+		data.Username = fmt.Sprintf("%s", response)
+		data.Loginoutbtn = logoutbtnHTML
+		aboutTemplate.Execute(w, data)
+	}
+}
+
+/*func userHandler(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("oauthstate")
+}*/
 
 func myatoi(str string) int {
 	result, _ := strconv.Atoi(str)

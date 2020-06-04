@@ -58,16 +58,21 @@ $.ajax({
 });
 
 var reppref = document.getElementById("repsdisplay")
-reppref.value = $.cookie("repspreference");
+repval = $.cookie("repspreference");
+if(repval > 0) {
+    reppref.value = repval;
+}else {
+    reppref.value = 1;
+}
 window.addEventListener('load', function () {
-    repschange()
-})
+    repschange();
+});
 
 function repschange() {
     console.log(reppref.value)
     updateReps(reppref.value)
     date = new Date(Date.now() + 365*24*60*60*1000)
-    document.cookie = "repspreference=" + this.value + "; expires=" +
+    document.cookie = "repspreference=" + reppref.value + "; expires=" +
         date + "; path=/"
 }
 function updateReps(reps) {

@@ -60,31 +60,18 @@ func (d *Database) GetUserLatest(email string) *PageData{
 		"FROM userdata WHERE email = '" + email + "';"
 	rows, err := d.conn.Query(context.Background(), querystring)
 	checkErr(err)
-	var sex bool
-	var age int
-	var weight float64
-	var deadlift int
-	var squat int
-	var bench int
-	var overhead int
-	for rows.Next() {
-		err = rows.Scan(&sex, &age, &weight, &deadlift, &squat, &bench, &overhead)
-		//checkErr(err) okay soooo... it does have an error, but if you don't check it code works great haha :)
-		// reason for err is if there is an empty array (all users who haven't logged a certain lift)
-	}
 	pagedata := PageData{
 		DLReps: 1,
 		SReps: 1,
 		BPReps: 1,
 		OHPReps: 1,
 	}
-	pagedata.Sex = sex
-	pagedata.Age = age
-	pagedata.Weight = weight
-	pagedata.DLWeight = deadlift
-	pagedata.SWeight = squat
-	pagedata.BPWeight = bench
-	pagedata.OHPWeight = overhead
+	for rows.Next() {
+		err = rows.Scan(&pagedata.Sex, &pagedata.Age, &pagedata.Weight, &pagedata.DLWeight, &pagedata.SWeight,
+			&pagedata.BPWeight, &pagedata.OHPWeight)
+		//checkErr(err) okay soooo... it does have an error, but if you don't check it code works great haha :)
+		// reason for err is if there is an empty array (all users who haven't logged a certain lift)
+	}
 	return &pagedata
 }
 
