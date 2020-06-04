@@ -15,32 +15,32 @@ $.ajax({
                 labels: jsondata["Date"],
                 datasets: [{
                         label: 'Weight',
-                        backgroundColor: 'rgba(0, 0, 0, 0)',
-                        borderColor: 'rgb(99,255,107)',
+                        backgroundColor: 'rgba(255,96,23,0.3)',
+                        borderColor: 'rgb(255,96,23)',
                         data: jsondata["Weight"]
                     },
                     {
                         label: 'Deadlift',
                         backgroundColor: 'rgba(0, 0, 0, 0)',
-                        borderColor: 'rgb(221,99,255)',
+                        borderColor: 'rgb(255,23,58)',
                         data: jsondata["Deadlift"]
                     },
                     {
                         label: 'Squat',
                         backgroundColor: 'rgba(0, 0, 0, 0)',
-                        borderColor: 'rgb(255,216,99)',
+                        borderColor: 'rgb(255,23,243)',
                         data: jsondata["Squat"]
                     },
                     {
-                        label: 'Deadlift',
+                        label: 'Bench',
                         backgroundColor: 'rgba(0, 0, 0, 0)',
-                        borderColor: 'rgb(104,99,255)',
+                        borderColor: 'rgb(23,62,255)',
                         data: jsondata["Bench"]
                     },
                     {
                         label: 'Overhead',
                         backgroundColor: 'rgba(0, 0, 0, 0)',
-                        borderColor: 'rgb(99, 206, 255)',
+                        borderColor: 'rgb(23,255,247)',
                         data: jsondata["Overhead"]
                     }]
             },
