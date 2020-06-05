@@ -1,6 +1,8 @@
 var form = document.getElementById("analyzeform")
 form.addEventListener('submit', submitForm);
 var clicked;
+var username = document.getElementById("username").innerText
+loggedin = (username != "Not Logged In")
 
 function submitForm(event){
     event.preventDefault()
