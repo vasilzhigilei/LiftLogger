@@ -57,11 +57,13 @@
       </div>
       <br>
       <div id="maincontent" class="container">
+         {{if ne .Username "Not Logged In" }}
          <div class="row">
             <div class="col-md-12 bg-light padding rounded" style="height: 40vh;">
                <canvas id="mainchart"></canvas>
             </div>
          </div>
+         {{ end }}
          <br>
          <div class="row">
             <div class="col-md-12 bg-light padding rounded">
@@ -178,7 +180,9 @@
                   <div class="row">
                      <div class="col-md-12">
                         <button type="submit" onclick="clicked='analyze'" class="btn btn-primary btn-lg bg-darkblue">Analyze</button>
+                        {{ if ne .Username "Not Logged In" }}
                         <button type="submit" onclick="clicked='log'" class="btn btn-primary btn-lg bg-darkblue">Log & Analyze</button>
+                        {{ end }}
                      </div>
                   </div> <!-- / submit row -->
                </form>
