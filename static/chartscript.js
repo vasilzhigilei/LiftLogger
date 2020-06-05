@@ -82,9 +82,11 @@ if(!loggedin){
     })
 }
 
-window.addEventListener('load', function () {
-    repschange();
-});
+if(loggedin) {
+    window.addEventListener('load', function () {
+        repschange();
+    });
+}
 
 function repschange() {
     updateReps(reppref.value)
