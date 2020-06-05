@@ -6,6 +6,10 @@
     background-color: #e9ecef;
 }
 
+.text-darkerlight {
+    color: #e9ecef;
+}
+
 .rounded {
     border-radius: 7px;
 }

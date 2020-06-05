@@ -42,6 +42,7 @@ type GoogleUser struct {
 var db *Database // user database
 
 var indexTemplate *template.Template
+var aboutTemplate *template.Template
 var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 
 func main(){
@@ -56,6 +57,7 @@ func main(){
 	logoutbtnHTML = template.HTML(string(content))
 
 	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
+	aboutTemplate = template.Must(template.ParseFiles("templates/about.html"))
 
 	// Connect to database
 	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
