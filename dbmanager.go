@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx"
+	"math/rand"
+	"time"
 )
 
 /**
@@ -108,5 +110,37 @@ func (d *Database) PrintAllUsers() {
 			panic(err)
 		}
 		fmt.Printf("%s %t %f %f\n", email, sex, weight, age)
+	}
+}
+
+func (d *Database) SetDemoData(email string) {
+	// number of days to generate
+	days := 100
+	user := User{
+		Email:    email,
+		Sex:      false,
+		Age:      21,
+		Weight:   make([]float64, days),
+		Deadlift: make([]int, days),
+		Squat:    make([]int, days),
+		Bench:    make([]int, days),
+		Overhead: make([]int, days),
+		Date:     make([]string, days),
+	}
+	// initial values to base generation from
+	user.Weight[0] = 185.6
+	user.Deadlift[0] = 225
+	user.Squat[0] = 205
+	user.Bench[0] = 165
+	user.Overhead[0] = 105
+	user.Date[0] = fmt.Sprint((time.Now().AddDate(0, 0, days)).Date())
+
+	for i := 1; i < days; i++ {
+		user.Weight[i] = (user.Weight[0] + user.Weight[i - 1] + (rand.Float64() - .5)*2)/2
+		user.Deadlift[i] = (user.Deadlift[0] + user.Deadlift[i - 1] + (rand.Intn(5) - 2))/2
+		user.Squat[i] = (user.Squat[0] + user.Squat[i - 1] + (rand.Intn(5) - 2))/2
+		user.Bench[i] = (user.Bench[0] + user.Bench[i - 1] + (rand.Intn(5) - 2))/2
+		user.Overhead[i] = (user.Overhead[0] + user.Overhead[i - 1] + (rand.Intn(5) - 2))/2
+		user.Date[i] = fmt.Sprint((time.Now().AddDate(0, 0, days - i)).Date())
 	}
 }
