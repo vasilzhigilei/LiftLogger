@@ -55,8 +55,11 @@
             </div>
          </div>
       </div>
-      <br>
       <div id="maincontent" class="container">
+          <br>
+          <div class="alert alert-info" role="alert">
+              Website is set to "Demo-mode" - logging in auto-generates demo data for the user's account
+          </div>
          {{if ne .Username "Not Logged In" }}
          <div class="row">
             <div class="col-md-12 bg-light padding rounded" style="height: 40vh;">
