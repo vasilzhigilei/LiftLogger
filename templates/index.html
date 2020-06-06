@@ -57,17 +57,18 @@
       </div>
       <div id="maincontent" class="container">
           <br>
-          <div class="alert alert-info" role="alert">
+          <div class="alert alert-info nomargin" role="alert">
               Website is set to "Demo-mode" - logging in auto-generates demo data for the user's account
           </div>
-         {{if ne .Username "Not Logged In" }}
-         <div class="row">
+          <br>
+        {{if ne .Username "Not Logged In" }}
+        <div class="row">
             <div class="col-md-12 bg-light padding rounded" style="height: 40vh;">
-               <canvas id="mainchart"></canvas>
+                <canvas id="mainchart"></canvas>
             </div>
-         </div>
-         {{ end }}
-         <br>
+        </div>
+        <br>
+        {{ end }}
          <div class="row">
             <div class="col-md-12 bg-light padding rounded">
                <form id="analyzeform" action="/loglifts">
