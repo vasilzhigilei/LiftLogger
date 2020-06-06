@@ -131,15 +131,16 @@ func (d *Database) SetDemoData(email string) error {
 	user.Weight[0] = 185.6
 	user.Deadlift[0] = 225
 	user.Squat[0] = 205
-	user.Bench[0] = 165
-	user.Overhead[0] = 105
+	user.Bench[0] = 155
+	user.Overhead[0] = 95
 	user.Date[0] = fmt.Sprint((time.Now().AddDate(0, 0, -days*2)).Date())
 
 	for i := 1; i < days; i++ {
-		user.Weight[i] = (user.Weight[0] + user.Weight[i - 1])/2 + (rand.Float64() - .1)*10
-		user.Deadlift[i] = (user.Deadlift[0] + user.Deadlift[i - 1])/2 + (rand.Intn(20) - 1)
-		user.Squat[i] = (user.Squat[0] + user.Squat[i - 1])/2 + (rand.Intn(20) - 1)
-		user.Bench[i] = (user.Bench[0] + user.Bench[i - 1])/2 + (rand.Intn(20) - 1)
+		user.Weight[i] = myparsefloat(fmt.Sprintf("%.1f", (user.Weight[0] + user.Weight[i - 1] +
+			float64(rand.Intn(15)-7))/2))
+		user.Deadlift[i] = user.Deadlift[i - 1] + (rand.Intn(8) - 2)*rand.Intn(2)
+		user.Squat[i] = user.Squat[i - 1] + (rand.Intn(7) - 2)*rand.Intn(2)
+		user.Bench[i] = user.Bench[i - 1] + (rand.Intn(5) - 1)*rand.Intn(2)
 		user.Overhead[i] = user.Overhead[i - 1] + (rand.Intn(5) - 1)*rand.Intn(2)
 		user.Date[i] = fmt.Sprint((time.Now().AddDate(0, 0, (-days + i)*2)).Date())
 	}
