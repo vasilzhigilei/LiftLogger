@@ -3,8 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -38,20 +41,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		data.Loginoutbtn = logoutbtnHTML
 		indexTemplate.Execute(w, data)
 	}
-}
-
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	oauthStateString := generateStateOauthCookie(w)
-	url := authconf.AuthCodeURL(oauthStateString)
-	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-}
-
-func logoutHandler(w http.ResponseWriter, r * http.Request) {
-	c, err := r.Cookie("oauthstate")
-	checkErr(err)
-	_, err = cache.Do("DEL", c.Value)
-	checkErr(err)
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func logliftsHandler(w http.ResponseWriter, r *http.Request){
@@ -119,6 +108,41 @@ func aboutHandler(w http.ResponseWriter, r *http.Request){
 		data.Loginoutbtn = logoutbtnHTML
 		aboutTemplate.Execute(w, data)
 	}
+}
+// global authentication variable
+var authconf = &oauth2.Config{
+	RedirectURL: "http://localhost:8000/callback",
+	ClientID: os.Getenv("GOOGLE_CLIENT_ID"),
+	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	Scopes: []string{"https://www.googleapis.com/auth/userinfo.email"},
+	Endpoint: google.Endpoint,
+}
+
+type GoogleUser struct {
+	ID string `json:"id"`
+	Email string `json:"email"`
+	VerifiedEmail bool `json:"verified_email"`
+	Name string `json:"name"`
+	GivenName string `json:"given_name"`
+	FamilyName string `json:"family_name"`
+	Link string `json:"link"`
+	Picture string `json:"picture"`
+	Gender string `json:"gender"`
+	Locale string `json:"locale"`
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	oauthStateString := generateStateOauthCookie(w)
+	url := authconf.AuthCodeURL(oauthStateString)
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+}
+
+func logoutHandler(w http.ResponseWriter, r * http.Request) {
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	_, err = cache.Do("DEL", c.Value)
+	checkErr(err)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
