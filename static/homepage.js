@@ -93,7 +93,12 @@ function setInputFilter(textbox, inputFilter) {
     });
 }
 
-idsInt = ["repsdisplay", "dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
+idsInt = ["dl-weight", "dl-reps", "s-weight", "s-reps", "bp-weight", "bp-reps", "ohp-weight", "ohp-reps", "u-age"]
+
+// limit repsdisplay (0,100]
+setInputFilter(document.getElementById("repsdisplay"), function (value) {
+    return /^\d*$/.test(value) && (parseInt(value) > 0 || parseInt(value) <= 100);
+});
 
 // limit lift weights/reps from 0 to 1200
 for(i = 0; i < idsInt.length; ++i) {
