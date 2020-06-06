@@ -62,12 +62,7 @@ func (d *Database) GetUserLatest(email string) *PageData{
 		"FROM userdata WHERE email = '" + email + "';"
 	rows, err := d.conn.Query(context.Background(), querystring)
 	checkErr(err)
-	pagedata := PageData{
-		DLReps: 1,
-		SReps: 1,
-		BPReps: 1,
-		OHPReps: 1,
-	}
+	pagedata := PageData{}
 	for rows.Next() {
 		err = rows.Scan(&pagedata.Sex, &pagedata.Age, &pagedata.Weight, &pagedata.DLWeight, &pagedata.SWeight,
 			&pagedata.BPWeight, &pagedata.OHPWeight)

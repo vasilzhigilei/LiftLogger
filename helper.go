@@ -18,13 +18,9 @@ type PageData struct {
 	Age int
 	Weight float64
 	DLWeight int
-	DLReps int
 	SWeight int
-	SReps int
 	BPWeight int
-	BPReps int
 	OHPWeight int
-	OHPReps int
 }
 
 type User struct {
