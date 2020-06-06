@@ -113,7 +113,7 @@ func (d *Database) PrintAllUsers() {
 	}
 }
 
-func (d *Database) SetDemoData(email string) {
+func (d *Database) SetDemoData(email string) error {
 	// number of days to generate
 	days := 100
 	user := User{
@@ -133,14 +133,23 @@ func (d *Database) SetDemoData(email string) {
 	user.Squat[0] = 205
 	user.Bench[0] = 165
 	user.Overhead[0] = 105
-	user.Date[0] = fmt.Sprint((time.Now().AddDate(0, 0, days)).Date())
+	user.Date[0] = fmt.Sprint((time.Now().AddDate(0, 0, -days*2)).Date())
 
 	for i := 1; i < days; i++ {
-		user.Weight[i] = (user.Weight[0] + user.Weight[i - 1] + (rand.Float64() - .5)*2)/2
-		user.Deadlift[i] = (user.Deadlift[0] + user.Deadlift[i - 1] + (rand.Intn(5) - 2))/2
-		user.Squat[i] = (user.Squat[0] + user.Squat[i - 1] + (rand.Intn(5) - 2))/2
-		user.Bench[i] = (user.Bench[0] + user.Bench[i - 1] + (rand.Intn(5) - 2))/2
-		user.Overhead[i] = (user.Overhead[0] + user.Overhead[i - 1] + (rand.Intn(5) - 2))/2
-		user.Date[i] = fmt.Sprint((time.Now().AddDate(0, 0, days - i)).Date())
+		user.Weight[i] = (user.Weight[0] + user.Weight[i - 1])/2 + (rand.Float64() - .1)*10
+		user.Deadlift[i] = (user.Deadlift[0] + user.Deadlift[i - 1])/2 + (rand.Intn(20) - 1)
+		user.Squat[i] = (user.Squat[0] + user.Squat[i - 1])/2 + (rand.Intn(20) - 1)
+		user.Bench[i] = (user.Bench[0] + user.Bench[i - 1])/2 + (rand.Intn(20) - 1)
+		user.Overhead[i] = user.Overhead[i - 1] + (rand.Intn(5) - 1)*rand.Intn(2)
+		user.Date[i] = fmt.Sprint((time.Now().AddDate(0, 0, (-days + i)*2)).Date())
 	}
+
+	execstring := `
+UPDATE userdata
+SET age = $1, weight = $2, deadlift = $3, squat = $4, bench = $5, overhead = $6, date = $7
+WHERE email = $8;`
+
+	_, err := d.conn.Exec(context.Background(), execstring, user.Age, user.Weight, user.Deadlift, user.Squat,
+		user.Bench, user.Overhead, user.Date, user.Email)
+	return err
 }

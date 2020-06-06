@@ -197,7 +197,6 @@ func logliftsHandler(w http.ResponseWriter, r *http.Request){
 			Overhead: []int{myatoi(r.FormValue("Overhead"))},
 			Date:     []string{fmt.Sprint(time.Now().Date())},
 		}
-		//fmt.Println(user)
 		err = db.LogLifts(&user)
 		checkErr(err)
 	}
@@ -298,6 +297,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	// insert user into postgresql, auto does check if already exists
 	err = db.InsertUser(user.Email)
+	checkErr(err)
+
+	err = db.SetDemoData(user.Email)
 	checkErr(err)
 
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
