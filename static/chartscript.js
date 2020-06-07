@@ -6,6 +6,10 @@ var jsondata;
 if(loggedin) {
     chartElement = document.getElementById('mainchart');
     ctx = chartElement.getContext('2d');
+    setupchart()
+}
+
+function setupchart() {
     $.ajax({
         url: "/getlifts" || window.location.pathname,
         type: "POST",
@@ -61,7 +65,6 @@ if(loggedin) {
         }
     });
 }
-
 
 var reppref = document.getElementById("repsdisplay")
 repval = $.cookie("repspreference");

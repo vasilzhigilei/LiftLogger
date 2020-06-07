@@ -46,7 +46,6 @@ function getData() {
     for(var i = 0; i < inputblocks.length; i++){
         result = getFields(inputblocks[i])
         if(inputblocks[i].id === "Personal") {
-            console.log(result[1])
             data["Weight"] = result[0]
             data["Age"] = result[1]
         }else {
