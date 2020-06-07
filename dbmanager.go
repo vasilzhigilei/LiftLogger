@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4"
 	"math/rand"
 	"time"
 )
