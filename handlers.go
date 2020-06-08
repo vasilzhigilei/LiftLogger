@@ -110,7 +110,7 @@ func aboutHandler(w http.ResponseWriter, r *http.Request){
 	}
 }
 // global authentication variable
-var authconf = &oauth2.Config{
+var authconf = &oauth2.Config {
 	RedirectURL: "http://liftloggertesting.herokuapp.com/callback",
 	ClientID: os.Getenv("GOOGLE_CLIENT_ID"),
 	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),

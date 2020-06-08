@@ -59,6 +59,11 @@ function setupchart() {
                 options: {maintainAspectRatio: false,}
             });
             console.log("lifts fetched for chart")
+            if(loggedin) {
+                window.addEventListener('load', function () {
+                    repschange();
+                });
+            }
         },
         error: function (jXHR, textStatus, errorThrown) {
             alert(errorThrown);
@@ -83,12 +88,6 @@ if(!loggedin){
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-}
-
-if(loggedin) {
-    window.addEventListener('load', function () {
-        repschange();
-    });
 }
 
 function repschange() {
