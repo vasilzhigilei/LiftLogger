@@ -77,5 +77,12 @@ func main(){
 
 	// keep PathPrefix empty
 	r.PathPrefix("/").Handler(staticFileHandler).Methods("GET")
-	http.ListenAndServe(":8000", r)
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8000"
+	}
+
+	http.ListenAndServe(":" + port, r)
 }
