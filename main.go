@@ -26,6 +26,13 @@ func initCache() {
 	cache = conn
 }
 
+func initDB() *Database {
+	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
+	err := db.GenerateTable()
+	checkErr(err)
+	return db
+}
+
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
@@ -41,7 +48,7 @@ func main(){
 	aboutTemplate = template.Must(template.ParseFiles("templates/about.html"))
 
 	// Connect to database
-	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
+	db = initDB()
 
 	// Declare a new router
 	r := mux.NewRouter()

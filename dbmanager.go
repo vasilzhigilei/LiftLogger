@@ -26,6 +26,24 @@ func NewDatabase(connString string) *Database{
 	return d
 }
 
+func (d *Database) GenerateTable() error {
+	execstring := `
+CREATE TABLE IF NOT EXISTS userdata (
+email text NOT NULL UNIQUE,
+sex boolean NOT NULL DEFAULT false,
+age integer NOT NULL DEFAULT 0,
+weight double precision[] NOT NULL DEFAULT ARRAY[]::double precision[],
+deadlift integer[] NOT NULL DEFAULT ARRAY[]::integer[],
+squat integer[] NOT NULL DEFAULT ARRAY[]::integer[],
+bench integer[] NOT NULL DEFAULT ARRAY[]::integer[],
+overhead integer[] NOT NULL DEFAULT ARRAY[]::integer[],
+date text[] NOT NULL DEFAULT ARRAY[]::text[]
+);
+`
+	_, err := d.conn.Exec(context.Background(), execstring)
+	return err
+}
+
 /**
 Insert user, if conflict (user already exists), do nothing
  */
