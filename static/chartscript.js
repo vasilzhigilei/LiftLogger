@@ -60,10 +60,7 @@ function setupchart() {
             });
             console.log("lifts fetched for chart")
             if(loggedin) {
-                console.log("loggedin and about to addeventlistener")
-                window.addEventListener('load', function () {
-                    repschange();
-                });
+                repschange();
             }
         },
         error: function (jXHR, textStatus, errorThrown) {
