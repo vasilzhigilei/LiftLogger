@@ -83,7 +83,9 @@ func main(){
 	port := os.Getenv("PORT")
 
 	if port == "" {
+		// if running locally
 		port = "8000"
+		authconf.RedirectURL = "http://localhost:8000/callback"
 	}
 
 	http.ListenAndServe(":" + port, r)
