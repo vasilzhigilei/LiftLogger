@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 var db *Database // user database
@@ -19,7 +20,7 @@ var cache redis.Conn
 
 func initCache() {
 	//conn, err := redis.DialURL("redis://localhost:6379")
-	conn, err := redis.Dial("tcp", "localhost:6379")
+	conn, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	checkErr(err) // check error
 
 	// assign connection to package level 'cache' variable
@@ -27,7 +28,7 @@ func initCache() {
 }
 
 func initDB() *Database {
-	db = NewDatabase("postgres://postgres:password@localhost:5433/liftlogger")
+	db = NewDatabase(os.Getenv("DATABASE_URL"))
 	err := db.GenerateTable()
 	checkErr(err)
 	return db
