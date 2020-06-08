@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
 	"html/template"
@@ -49,6 +50,7 @@ func main(){
 
 	// Connect to database
 	db = initDB()
+	defer db.conn.Close(context.Background())
 
 	// Declare a new router
 	r := mux.NewRouter()
