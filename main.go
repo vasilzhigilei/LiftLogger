@@ -37,6 +37,7 @@ func initDB() *Database {
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
+	defer cache.Close()
 
 	content, err := ioutil.ReadFile("templates/loginbtn.html")
 	checkErr(err)
