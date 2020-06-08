@@ -178,7 +178,3 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
-
-func verificationHandler(w http.ResponseWriter, r *http.Request) {
-	verificationTemplate.Execute(w, nil)
-}

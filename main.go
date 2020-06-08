@@ -13,7 +13,6 @@ var db *Database // user database
 
 var indexTemplate *template.Template
 var aboutTemplate *template.Template
-var verificationTemplate *template.Template
 var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 
 // Store redis connection as a package level variable
@@ -48,9 +47,6 @@ func main(){
 	indexTemplate = template.Must(template.ParseFiles("templates/index.html"))
 	aboutTemplate = template.Must(template.ParseFiles("templates/about.html"))
 
-	// server public google verification html
-	verificationTemplate = template.Must(template.ParseFiles("templates/google1ae77ee26d73a86b.html"))
-
 	// Connect to database
 	db = initDB()
 
@@ -70,8 +66,6 @@ func main(){
 	// API AJAX calls to log lifts or fetch lifting history
 	r.HandleFunc("/loglifts", logliftsHandler).Methods("POST")
 	r.HandleFunc("/getlifts", getliftsHandler).Methods("POST")
-
-	r.HandleFunc("/google1ae77ee26d73a86b.html", verificationHandler).Methods("GET")
 
 	// Get latest user data (more specifically, other users than oneself)
 	//r.HandleFunc("/user", userHandler).Methods("POST")
