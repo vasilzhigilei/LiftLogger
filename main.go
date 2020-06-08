@@ -19,7 +19,6 @@ var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 var cache redis.Conn
 
 func initCache() {
-	//conn, err := redis.DialURL("redis://localhost:6379")
 	conn, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	checkErr(err) // check error
 
