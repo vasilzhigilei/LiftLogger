@@ -37,7 +37,7 @@ func initDB() *Database {
 func main(){
 	var err error // declare error variable err to avoid :=
 	initCache() // initialize redis cache
-	defer cache.Close()
+	// defer cache.Close() // global var, should be okay without closing, may fix a bug I'm experiencing by not closing
 
 	content, err := ioutil.ReadFile("templates/loginbtn.html")
 	checkErr(err)
