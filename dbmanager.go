@@ -15,6 +15,12 @@ type Database struct{
 	conn *pgx.Conn
 }
 
+/**
+Creates new postgres connection and returns as a Database struct
+Current program architecture only takes advantage of a single postgres connection,
+in the real world, with more users visiting, this system would have to be rewritten
+to increase postgres connections and pool queries
+ */
 func NewDatabase(connString string) *Database{
 	conn, err := pgx.Connect(context.Background(), connString)
 	if err != nil {
@@ -26,6 +32,10 @@ func NewDatabase(connString string) *Database{
 	return d
 }
 
+/**
+Generates table if it doesn't yet exist
+Useful and convenient when deploying on a new system
+ */
 func (d *Database) GenerateTable() error {
 	execstring := `
 CREATE TABLE IF NOT EXISTS userdata (
@@ -52,6 +62,10 @@ func (d *Database) InsertUser(email string) error {
 	return err
 }
 
+/**
+Log lifts into user row. Appends data and log date to corresponding arrays in the row
+If today's date already exists, replace data for this date
+ */
 func (d *Database) LogLifts(user *User) error {
 	execstring := `
 UPDATE userdata
@@ -74,6 +88,9 @@ WHERE email = $8;`
 	return err
 }
 
+/**
+Get latest user data. Useful for index.html templating of the weight/reps input fields
+ */
 func (d *Database) GetUserLatest(email string) *PageData{
 	querystring := "SELECT sex, age, weight[array_upper(weight, 1)], deadlift[array_upper(deadlift, 1)], " +
 		"squat[array_upper(squat, 1)], bench[array_upper(bench, 1)], overhead[array_upper(overhead, 1)] " +
@@ -90,6 +107,9 @@ func (d *Database) GetUserLatest(email string) *PageData{
 	return &pagedata
 }
 
+/**
+Get ALL of a user's data. Useful for chart AJAX call
+ */
 func (d *Database) GetUserAll(email string) *User{
 	querystring := "SELECT sex, age, weight, deadlift, squat, bench, overhead, date " +
 		"FROM userdata WHERE email = '" + email + "';"
@@ -106,11 +126,19 @@ func (d *Database) GetUserAll(email string) *User{
 	return &user
 }
 
+/**
+Unused debugging function to select all users in the table
+Selects email, sex, weight, and age from rows
+ */
 func (d *Database) SelectAllUsers() pgx.Rows{
 	rows, _ := d.conn.Query(context.Background(), "SELECT email, sex, weight, age FROM userdata")
 	return rows
 }
 
+/**
+Unused debugging function that prints all users in the table
+Prints all rows, only email, sex, weight, and age columns
+ */
 func (d *Database) PrintAllUsers() {
 	rows := d.SelectAllUsers()
 	for rows.Next() {
@@ -126,6 +154,10 @@ func (d *Database) PrintAllUsers() {
 	}
 }
 
+/**
+Auto-generate random lifting data and log in database
+Used every time user logs in when website set to "Demo mode"
+ */
 func (d *Database) SetDemoData(email string) error {
 	// number of days to generate
 	days := 100
