@@ -11,6 +11,11 @@ import (
 	"time"
 )
 
+/**
+Index page handler
+This is where all the cool things happen. User can log in, log lifts, modify reps display (saved as cookie),
+view various rep maximums for the four big compound lifts!
+ */
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Username:    "Not Logged In",
@@ -80,6 +85,10 @@ func getliftsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/**
+About page handler
+Serves the about page, with the user's email templated into the page
+ */
 func aboutHandler(w http.ResponseWriter, r *http.Request){
 	data := PageData{
 		Username:    "Not Logged In",
@@ -122,12 +131,20 @@ type GoogleUser struct {
 	Email string `json:"email"`
 }
 
+/**
+Login handler
+Generates random session id, and then redirects client to Google's authentication service
+ */
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	oauthStateString := generateStateOauthCookie(w)
 	url := authconf.AuthCodeURL(oauthStateString)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
+/**
+Logout handler
+Handles user logout; Deletes session from Redis cache
+ */
 func logoutHandler(w http.ResponseWriter, r * http.Request) {
 	c, err := r.Cookie("oauthstate")
 	checkErr(err)
@@ -136,6 +153,13 @@ func logoutHandler(w http.ResponseWriter, r * http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
+/**
+Callback handler for login
+Redirected to by Google's authentication service
+Receives session ID and email address, sets session/email pair in cache,
+and adds user to Postgres user DB if user doesn't already exist
+Redirects to index.html
+ */
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 	token, _ := authconf.Exchange(oauth2.NoContext, code)
