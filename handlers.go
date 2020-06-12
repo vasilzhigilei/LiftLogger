@@ -48,43 +48,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func logliftsHandler(w http.ResponseWriter, r *http.Request){
-	c, err := r.Cookie("oauthstate")
-	checkErr(err)
-	response, err := cache.Do("GET", c.Value)
-	checkErr(err)
-	if response != nil {
-		r.ParseForm()
-		//fmt.Println(r.Form)
-		user := User{
-			Email:    fmt.Sprintf("%s", response),
-			Sex:      false,
-			Age:      myatoi(r.FormValue("Age")),
-			Weight:   []float64{myparsefloat(r.FormValue("Weight"))},
-			Deadlift: []int{myatoi(r.FormValue("Deadlift"))},
-			Squat:    []int{myatoi(r.FormValue("Squat"))},
-			Bench:    []int{myatoi(r.FormValue("Bench"))},
-			Overhead: []int{myatoi(r.FormValue("Overhead"))},
-			Date:     []string{fmt.Sprint(time.Now().Date())},
-		}
-		err = db.LogLifts(&user)
-		checkErr(err)
-	}
-}
-
-func getliftsHandler(w http.ResponseWriter, r *http.Request) {
-	c, err := r.Cookie("oauthstate")
-	checkErr(err)
-	response, err := cache.Do("GET", c.Value)
-	checkErr(err)
-	if response != nil {
-		user := db.GetUserAll(fmt.Sprintf("%s", response))
-		b, err := json.Marshal(user)
-		checkErr(err)
-		w.Write(b)
-	}
-}
-
 /**
 About page handler
 Serves the about page, with the user's email templated into the page
@@ -127,6 +90,55 @@ var authconf = &oauth2.Config {
 	Endpoint: google.Endpoint,
 }
 
+/**
+Loglifts API call handler
+Takes submitted form data and logs user data into postgres database
+ */
+func logliftsHandler(w http.ResponseWriter, r *http.Request){
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	response, err := cache.Do("GET", c.Value)
+	checkErr(err)
+	if response != nil {
+		r.ParseForm()
+		user := User{
+			Email:    fmt.Sprintf("%s", response),
+			Sex:      false,
+			Age:      myatoi(r.FormValue("Age")),
+			Weight:   []float64{myparsefloat(r.FormValue("Weight"))},
+			Deadlift: []int{myatoi(r.FormValue("Deadlift"))},
+			Squat:    []int{myatoi(r.FormValue("Squat"))},
+			Bench:    []int{myatoi(r.FormValue("Bench"))},
+			Overhead: []int{myatoi(r.FormValue("Overhead"))},
+			Date:     []string{fmt.Sprint(time.Now().Date())},
+		}
+		err = db.LogLifts(&user)
+		checkErr(err)
+	}
+}
+
+/**
+Get lifts API call handler
+Returns all lifting data for the user who matches the request session
+ */
+func getliftsHandler(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("oauthstate")
+	checkErr(err)
+	response, err := cache.Do("GET", c.Value)
+	checkErr(err)
+	if response != nil {
+		user := db.GetUserAll(fmt.Sprintf("%s", response))
+		b, err := json.Marshal(user)
+		checkErr(err)
+		w.Write(b)
+	}
+}
+
+/**
+Struct to accept unmarshaling of Google user data
+Can be expanded to accept a large variety of additional user information on Google login
+Currently only need email address
+ */
 type GoogleUser struct {
 	Email string `json:"email"`
 }
