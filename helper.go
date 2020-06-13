@@ -11,6 +11,9 @@ import (
 	"time"
 )
 
+/**
+Page data for index.html templating
+ */
 type PageData struct {
 	Username string
 	Loginoutbtn template.HTML
@@ -23,6 +26,9 @@ type PageData struct {
 	OHPWeight int
 }
 
+/**
+User struct, data as would be found in postgres row
+ */
 type User struct {
 	Email string
 	Sex bool
@@ -35,16 +41,25 @@ type User struct {
 	Date []string
 }
 
+/**
+Atoi that ignores errors (allows for inline struct initialization)
+ */
 func myatoi(str string) int {
 	result, _ := strconv.Atoi(str)
 	return result
 }
 
+/**
+ParseFloat that ignores errors (allows for inline struct initialization)
+ */
 func myparsefloat(str string) float64 {
 	result, _ := strconv.ParseFloat(str, 64)
 	return result
 }
 
+/**
+Generates new session with 1 year expiration time
+ */
 func generateStateOauthCookie(w http.ResponseWriter) string {
 	var expiration = time.Now().Add(365 * 24 * time.Hour)
 
@@ -57,8 +72,10 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 	return state
 }
 
+/**
+Unused function for the purpose of debugging cache
+ */
 func cachePrintAll(){
-	// unused function, primarily for debugging
 	keys, err := redis.Strings(cache.Do("KEYS", "*"))
 	checkErr(err)
 	for _, key := range keys {
@@ -70,6 +87,9 @@ func cachePrintAll(){
 	fmt.Println()
 }
 
+/**
+Check error func
+ */
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
