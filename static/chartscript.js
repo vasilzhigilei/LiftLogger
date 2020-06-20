@@ -12,7 +12,7 @@ if(loggedin) {
 function setupchart() {
     $.ajax({
         url: "/getlifts" || window.location.pathname,
-        type: "POST",
+        type: "GET",
         success: function (data) {
             jsondata = JSON.parse(data)
             jsondatalocal = JSON.parse(data)

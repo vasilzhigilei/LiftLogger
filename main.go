@@ -19,6 +19,9 @@ var loginbtnHTML, logoutbtnHTML template.HTML // log in & out buttons
 // Store redis connection as a package level variable
 var cache redis.Conn
 
+/**
+Initialize redis cache for session/user pairs
+ */
 func initCache() {
 	conn, err := redis.DialURL(os.Getenv("REDIS_URL"))
 	checkErr(err) // check error
@@ -27,6 +30,9 @@ func initCache() {
 	cache = conn
 }
 
+/**
+Initialize database connection
+ */
 func initDB() *Database {
 	db = NewDatabase(os.Getenv("DATABASE_URL"))
 	err := db.GenerateTable()
@@ -68,7 +74,7 @@ func main(){
 
 	// API AJAX calls to log lifts or fetch lifting history
 	r.HandleFunc("/loglifts", logliftsHandler).Methods("POST")
-	r.HandleFunc("/getlifts", getliftsHandler).Methods("POST")
+	r.HandleFunc("/getlifts", getliftsHandler).Methods("GET")
 
 	// Get latest user data (more specifically, other users than oneself)
 	//r.HandleFunc("/user", userHandler).Methods("POST")
