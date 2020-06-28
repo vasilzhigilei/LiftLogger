@@ -76,6 +76,9 @@ func main(){
 	r.HandleFunc("/loglifts", logliftsHandler).Methods("POST")
 	r.HandleFunc("/getlifts", getliftsHandler).Methods("GET")
 
+	// favicon.ico handler
+	r.HandleFunc("/favicon.ico", faviconHandler)
+
 	// Get latest user data (more specifically, other users than oneself)
 	//r.HandleFunc("/user", userHandler).Methods("POST")
 
