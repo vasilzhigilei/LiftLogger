@@ -177,7 +177,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	token, _ := authconf.Exchange(oauth2.NoContext, code)
 
 	if !token.Valid(){
-		fmt.Fprintln(w, "Retrieved invalid token")
+		fmt.Fprintln(w, "Retrieved git invalid token")
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
